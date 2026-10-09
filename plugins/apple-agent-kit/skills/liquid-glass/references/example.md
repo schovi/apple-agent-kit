@@ -10,7 +10,7 @@ every primitive in this skill:
 - `ConcentricRectangle()` reading from `.containerShape(...)` — `Sections.swift` (`ConcentricDemo`)
 - `.sheet(...)` with `.presentationDetents([.medium, .large])` getting Liquid Glass automatically — `ContentView.swift` (`NewEntrySheet`)
 
-Run it on macOS 26 with Xcode 26:
+Run it on macOS 26 or later with Xcode 27:
 
 ```bash
 cd examples/macos-native-swift

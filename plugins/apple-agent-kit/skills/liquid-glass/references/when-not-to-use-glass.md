@@ -33,16 +33,15 @@ wrong place.
 - fix: place body text on solid content surfaces. Chrome around the
   reading surface may be glass (Mail / Notes pattern).
 
-## F3 — Forms and input fields
+## F3 — Forms and data-entry surfaces
 
-Inputs stack their own surfaces — system autocomplete, validation,
-suggestion bars. Any of them landing on a glass-backed field becomes
-glass-on-glass (F5).
+Forms with multiple inputs, validation, and autocomplete stack their own
+surfaces. Any of them landing on a glass-backed field becomes glass-on-glass.
 
-- failure: `.glassEffect` behind a `TextField` / `SecureField` /
-  `NSTextField`.
-- fix: inputs stay solid. If the panel around them is glass, the
-  input is a solid pill on the panel.
+- failure: `.glassEffect` behind a data-entry form.
+- fix: inputs keep their system field background. A single toolbar search,
+  command palette, or Spotlight-style field may sit inside a floating glass
+  control, while the field itself stays solid.
 
 ## F4 — Dense data tables
 
@@ -70,7 +69,7 @@ each `CABackdropLayer` costs three offscreen textures.
 - fix: group siblings with `GlassEffectContainer` (SwiftUI) /
   `NSGlassEffectContainerView` (AppKit). The container shares one
   sampling pass. For cross-distance grouping use
-  `.glassEffectUnion(id:in:)`.
+  `.glassEffectUnion(id:namespace:)`.
 
 ## Adoption context
 

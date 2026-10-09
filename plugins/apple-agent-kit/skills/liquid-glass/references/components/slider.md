@@ -18,7 +18,9 @@ Slider(value: $volume, in: 0...1) {
 ### Neutral value (macOS 26)
 
 ```swift
-Slider(value: $balance, neutralValue: 0.5, in: 0...1)
+Slider(value: $balance, in: 0...1, neutralValue: 0.5) {
+    Text("Balance")
+}
 ```
 
 `neutralValue:` defines the resting point. The fill renders from the

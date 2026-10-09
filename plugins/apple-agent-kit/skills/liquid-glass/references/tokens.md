@@ -1,6 +1,6 @@
 # Native tokens
 
-These geometry tokens apply to native code. Material numerics do not — macOS 26 renders Liquid Glass in real time and Apple
+These geometry tokens apply to native code. Material numerics do not — macOS 26 and later render Liquid Glass in real time and Apple
 publishes no portable blur / saturation / opacity values.
 
 ## Radii (points)
@@ -15,6 +15,8 @@ publishes no portable blur / saturation / opacity values.
 
 In SwiftUI: `RoundedRectangle(cornerRadius: ..., style: .continuous)`.
 Use `ConcentricRectangle()` for children so corner curvatures stay parallel.
+The 28 pt window radius is an observed macOS 26 value. Do not hard-code it.
+macOS 27 resolves a tighter uniform window radius.
 
 ## Spacing (points)
 
@@ -79,7 +81,7 @@ the surface counts against the B1 live-blur budget.
 
 | Role | SwiftUI | AppKit (`NSVisualEffectView.Material`) | macOS 26 Glass | Counts vs B1 |
 |---|---|---|---|---|
-| `sidebar` | `Glass.regular` (auto on `NavigationSplitView` sidebar) | `.sidebar` | regular | yes |
+| `sidebar` | system-applied by `NavigationSplitView` | `NSSplitViewItem(sidebarWithViewController:)` with `.sidebar` behavior | regular | yes |
 | `toolbar` | `Glass.regular` (auto on `.toolbar { ... }`) | `.titlebar` / `NSToolbar` unified | regular | yes |
 | `menu` | system-applied via `Menu` / `.contextMenu` | `.menu` | regular | yes |
 | `popover` | system-applied via `.popover(isPresented:arrowEdge:)` | `.popover` | regular | yes |
@@ -91,6 +93,16 @@ the surface counts against the B1 live-blur budget.
 
 Rule of thumb for amateurs: don't ask "should this be `.thin` or `.thick`?" —
 ask "what does this surface *do*?" Pick the role first; the material follows.
+
+## B1 live-backdrop budget
+
+`GlassEffectContainer` and `NSGlassEffectContainerView` count as one
+surface. `Material` and `NSVisualEffectView` using behind-window or
+within-window blending also count because they use live backdrop blur.
+
+- Recommended 3, transient 5, ceiling 6, one shader hero per pane.
+- These are kit defaults from observation, not Apple limits.
+- Exceed them only after an Instruments profile on the slowest supported Mac.
 
 Wrong:
 

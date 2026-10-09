@@ -10,19 +10,22 @@ A **live-blurred surface** in native code is:
 - any view modified by `.glassEffect(...)` where the variant is not
   `.identity`,
 - any `NSGlassEffectView`,
+- `Material` and `NSVisualEffectView` with behind-window or within-window
+  blending, because they are live backdrop blurs,
 - the content of a `GlassEffectContainer` / `NSGlassEffectContainerView`
   — the *container* counts as one surface regardless of how many
   children it groups. That is the point of the container.
 
 ## The cap
 
-Per top-level layout pane (sidebar / content / inspector):
+Per top-level layout pane (sidebar / content / inspector), use these kit
+defaults from observation, not Apple limits:
 
 | Tier | Surfaces | When |
 |---|---|---|
 | Calm | 2–3 | Default. Mail, Notes, Finder at rest. |
 | Busy | 4–5 | Transient — popover or floating HUD on screen. |
-| Ceiling | 6 | Hard maximum. Above this, share sampling. |
+| Ceiling | 6 | Profile before exceeding this. Share sampling first. |
 
 Numbers come from observed Apple-ship apps plus JuniperPhoton's
 measurement of three offscreen textures per `CABackdropLayer` and the
@@ -52,7 +55,7 @@ that exceed one-per-pane even though B1 does not count shaders directly.
 
 - **One container per logical group.** Toolbar items, stepper, HUD
   rows — all into one `GlassEffectContainer`. Cost: 1 surface.
-- **Cross-distance morph** — `.glassEffectUnion(id:in:)` keeps two
+- **Cross-distance morph** — `.glassEffectUnion(id:namespace:)` keeps two
   far-apart elements on one sample.
 - **Downgrade non-primary surfaces.** A second floating panel that
   doesn't compete for attention can drop to solid (system color +
@@ -61,10 +64,10 @@ that exceed one-per-pane even though B1 does not count shaders directly.
 
 ## When to fail review
 
-`apple-app-reviewer` rejects a screen when:
+`apple-app-reviewer` flags a screen when:
 
-- a single visible pane carries more than the hard ceiling (6) live-blurred
-  surfaces, **or**
+- a single visible pane carries more than the ceiling (6) live-blurred
+  surfaces without an Instruments profile on the slowest supported Mac, **or**
 - the screen rests above the recommended cap (3) with no transient
   reason (no open popover / HUD / sheet).
 

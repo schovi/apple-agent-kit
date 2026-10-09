@@ -1,13 +1,13 @@
 ---
 name: macos-app-design
-description: Design and build native-feeling macOS apps in SwiftUI or AppKit. Use whenever the user asks to make a desktop app, Mac app, system utility, or anything that should look and feel like a native Mac application — including layout, menu bar conformance, multi-window scenes, keyboard shortcuts, file management, app icon, system primitives (alerts/dialogs/tooltips), light/dark mode, and accessibility. Also trigger when users mention "native feel", "Apple design patterns", "sidebar layout", "traffic lights", menu bar order, or want tools that feel like they belong on macOS. For Liquid Glass material specifically (macOS 26 `glassEffect`, glass anti-patterns, glass performance budget), use the sibling skill `liquid-glass`.
+description: Design and build native-feeling macOS apps in SwiftUI or AppKit. Use whenever the user asks to make a desktop app, Mac app, system utility, or anything that should look and feel like a native Mac application — including layout, menu bar conformance, multi-window scenes, keyboard shortcuts, file management, app icon, system primitives (alerts/dialogs/tooltips), light/dark mode, and accessibility. Also trigger when users mention "native feel", "Apple design patterns", "sidebar layout", "traffic lights", menu bar order, or want tools that feel like they belong on macOS. For Liquid Glass material specifically (macOS 26+ `glassEffect`, glass anti-patterns, glass performance budget), use the sibling skill `liquid-glass`.
 ---
 
 # macOS app design — native craft for agents
 
 Build interfaces that feel like they belong on the user's computer — not websites crammed into a window. A native Mac app is a **system tool** that lives where the user needs it: appear when needed, get out of the way immediately after.
 
-This skill is glass-agnostic. Most Mac apps run on macOS 14+ and never touch a `.glassEffect`. The macOS 26 glass material is a separate concern — see the sibling skill `liquid-glass` and compose it on top of the structure this skill teaches.
+This skill is glass-agnostic. Many Mac apps still support macOS 14+, and apps built with the macOS 26+ SDK get system glass on standard chrome without writing `.glassEffect`. Custom glass is a separate concern — see the sibling skill `liquid-glass` and compose it on top of the structure this skill teaches.
 
 ## When to use this skill vs `liquid-glass`
 
@@ -22,6 +22,7 @@ This skill is glass-agnostic. Most Mac apps run on macOS 14+ and never touch a `
 | Where can I put a `.glassEffect`? What's the glass budget per pane? | `liquid-glass` |
 | Glass auto-degradation under `reduceTransparency`? | `liquid-glass` |
 | Metal `.layerEffect` for a hero surface? | `liquid-glass` (shader subagent) |
+| Branded custom UI that still behaves like a Mac app? Custom canvas? Is custom worth the cost? | `design-custom-macos-apps` |
 
 When in doubt, both. The HIG conformance bits compose cleanly with glass.
 
@@ -36,7 +37,7 @@ When in doubt, both. The HIG conformance bits compose cleanly with glass.
 5. **Every primary action gets a keyboard shortcut.** See `references/keyboard-shortcuts.md` for modifier conventions and what NOT to override.
 6. **Use the system primitives for alerts, dialogs, tooltips.** Do not restyle. See `references/system-primitives.md`.
 7. **Light + dark mode is not optional.** Design both. Do not invert colors. See `references/light-dark-and-accessibility.md`.
-8. **Run the accessibility checklist** before returning: labels on every icon-only control, focus visible, 44×44 hit area, color is never the only signal. See `references/accessibility.md`.
+8. **Run the accessibility checklist** before returning: labels on every icon-only control, focus visible, hit areas per the macOS size policy (28 × 28 pt default, 20 × 20 pt floor, 24 × 24 pt for custom hit areas), color is never the only signal. See `references/accessibility.md`.
 
 ## Output rules
 
@@ -48,7 +49,7 @@ When in doubt, both. The HIG conformance bits compose cleanly with glass.
 
 ## What this skill is not
 
-- Not iOS — see `ios-app-design` (placeholder) when that lands.
+- Not iOS. The kit targets macOS; for iOS code use Apple's Xcode 27 skills.
 - Not Liquid Glass material rules — see `liquid-glass`.
 - Not an Apple-official design system. Build to HIG, but never claim "Apple-certified" or "Apple-endorsed".
 
@@ -65,7 +66,7 @@ When in doubt, both. The HIG conformance bits compose cleanly with glass.
 - `references/titlebar-accessory.md` — title-bar accessory views.
 - `references/system-primitives.md` — alerts, confirmation dialogs, tooltips. Use the system; don't restyle.
 - `references/icon.md` — Icon Composer, squircle grid, light / dark / tinted variants.
-- `references/accessibility.md` — WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.5 target size, 4.1.2 name) with SwiftUI + AppKit recipes.
+- `references/accessibility.md` — WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.8 target size, 4.1.2 name) and the macOS click-target size policy with SwiftUI + AppKit recipes.
 - `references/light-dark-and-accessibility.md` — appearance, dynamic system color, system accent.
 - `references/patterns/` — common SwiftUI structural patterns:
   - `form-rows.md`, `inset-list.md`, `disclosure-group.md`, `stepper.md`.
@@ -73,3 +74,5 @@ When in doubt, both. The HIG conformance bits compose cleanly with glass.
 ## Composes with
 
 - `liquid-glass` — apply glass material to the surfaces this skill structures. Glass anti-patterns / budget / accessibility auto-degradation live there.
+- `design-custom-macos-apps` — when the app needs its own visual identity: customization levels, glass strategy, maintenance cost.
+- Apple's Xcode 27 skills (`swiftui-specialist`, `swiftui-whats-new-27`, `building-document-based-swiftui-applications`). They cover SwiftUI code correctness, data flow, performance, and the `Document` protocol; this skill covers HIG and Mac behavior. Prefer Apple's skill when both apply to the same API.

@@ -15,9 +15,9 @@ The plugin is the **single source of truth**. Tokens, rules, anti-patterns, and 
 | `plugins/apple-agent-kit/skills/liquid-glass/` | macOS 26+ Liquid Glass material: APIs, tokens, anti-patterns A1–A24, budget B1, forbidden surfaces F1–F5, shaders |
 | `plugins/apple-agent-kit/skills/macos-app-design/` | HIG conformance and Mac craft: menu bar, windows, shortcuts, file management, system primitives, icon, accessibility |
 | `plugins/apple-agent-kit/skills/design-custom-macos-apps/` | Distinctive custom UI that keeps Mac behavior: customization levels, glass strategy, maintenance cost, review checklist, case studies |
-| `plugins/apple-agent-kit/skills/ios-app-design/` | Placeholder stub |
 | `plugins/apple-agent-kit/agents/` | Claude-only subagents. Codex ignores them |
 | `examples/macos-native-swift/` | SwiftUI showcase that exercises the skills |
+| `tools/check-swift-snippets.py` | Typechecks every Swift snippet in the plugin against the installed SDK |
 | `docs/` | Install guides and `resources.md` (source dossier for maintainers; not shipped with the plugin) |
 | `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json` | Marketplace catalogs. Both point at the plugin folder |
 
@@ -49,9 +49,12 @@ When adding an ID, pick the prefix by category, never reuse a number, and update
 
 | If you touched | Run |
 |---|---|
-| `examples/macos-native-swift/` or any reference with Swift code | `examples/macos-native-swift/scripts/build.sh` |
+| Any skill or agent file with a ```swift block | `python3 tools/check-swift-snippets.py` (must report 0 fail) |
+| `examples/macos-native-swift/` | `examples/macos-native-swift/scripts/build.sh` |
 | Plugin manifests or agents | `claude plugin validate plugins/apple-agent-kit` |
 | IDs, file names, or API names | the drift sweep below |
+
+`tools/check-swift-snippets.py` typechecks every Swift snippet against the installed macOS SDK (target macOS 26). It stubs names a snippet borrows from surrounding code, so FAIL means a real API mistake: a wrong label, a missing member, or an API unavailable on macOS. Mark a deliberately broken example with `<!-- swift-check: skip -->` on the line above its fence. Prefer self-contained snippets.
 
 The showcase compiles a Metal shader. On Xcode 26+ install the Metal Toolchain once: `xcodebuild -downloadComponent MetalToolchain`.
 

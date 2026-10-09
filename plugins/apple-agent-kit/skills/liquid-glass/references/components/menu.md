@@ -1,7 +1,7 @@
 # Menu
 
 Pull-down or context menu — list of actions with optional separators
-and keyboard shortcut hints. Regular glass on macOS 26 (system-applied).
+and keyboard shortcut hints. Regular glass on macOS 26 and later (system-applied).
 
 ## SwiftUI — pull-down
 

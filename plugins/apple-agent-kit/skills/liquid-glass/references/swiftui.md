@@ -1,6 +1,6 @@
 # SwiftUI cheat-sheet
 
-Confirmed APIs for SwiftUI on macOS 26 / iOS 26. Sources and maintainer
+Confirmed APIs for SwiftUI on macOS 26 and later / iOS 26. Sources and maintainer
 provenance live in the apple-agent-kit repository's `docs/resources.md` (§ B–F).
 Do not invent API names — if you need
 something not listed here, check Apple's reference first.
@@ -81,7 +81,7 @@ state change in `withAnimation`. The full pattern lives in
 
 ```swift
 @Namespace private var ns
-@State private var expanded = false
+@Binding var expanded: Bool
 
 GlassEffectContainer(spacing: 24) {
     Button(expanded ? "Collapse" : "Expand") {
@@ -98,10 +98,10 @@ GlassEffectContainer(spacing: 24) {
 ```
 
 Requirements: same `GlassEffectContainer`, same `@Namespace`, animated
-state change. Use `.glassEffectUnion(id:in:)` when participants live
+state change. Use `.glassEffectUnion(id:namespace:)` when participants live
 far apart (e.g. toolbar item morphing into a content-area capsule).
 
-### `.glassEffectUnion(id:in:)` — dynamic and cross-ancestor
+### `.glassEffectUnion(id:namespace:)` — dynamic and cross-ancestor
 
 Apple's guidance: `glassEffectUnion` is "useful when creating views
 dynamically or with views that live outside of an HStack or VStack."
@@ -117,7 +117,7 @@ Use it on:
 ```swift
 ForEach(items) { item in
     ItemPill(item)
-        .glassEffectUnion(id: "pill-row", in: ns)
+        .glassEffectUnion(id: "pill-row", namespace: ns)
 }
 ```
 
@@ -150,13 +150,14 @@ NavigationSplitView {
 
 ```swift
 ScrollView(.horizontal) { ... }
-    .scrollExtensionMode(.underSidebar)
+    .ignoresSafeArea(.container, edges: .horizontal)
+    .safeAreaPadding(.horizontal)
 ```
 
-Use `.scrollExtensionMode(.underSidebar)` when a horizontal scroll
-view should extend its content under a floating sidebar or inspector
-(media reels, photo strips). Without it, horizontal scroll content
-clips at the sidebar edge.
+Extend the scroll container under the sidebar or inspector. Keep scroll
+content readable with `safeAreaPadding`. Put
+`backgroundExtensionEffect()` on background art when it should show
+through the surrounding chrome.
 
 ## Scroll edge effects
 
@@ -168,7 +169,7 @@ ScrollView { ... }
     .scrollEdgeEffectStyle(.hard, for: .top)
 ```
 
-- Styles: `.soft` (default), `.hard`.
+- Styles: `.automatic` (default), `.soft`, `.hard`.
 - Edges: `.top`, `.bottom`, `.leading`, `.trailing`, `.all`.
 - One style per edge. Never mix soft + hard on adjacent edges of the
   same scroll view.
@@ -202,7 +203,7 @@ NavigationSplitView {
 }
 ```
 
-`NavigationSplitView` picks up Liquid Glass automatically on macOS 26 —
+`NavigationSplitView` picks up Liquid Glass automatically on macOS 26 and later —
 don't add `.sidebar` background materials manually.
 
 ## Toolbar
@@ -243,8 +244,8 @@ when adjacent items should read as separate controls.
 
 ```swift
 .toolbar {
-    DefaultToolbarItem(kind: .sidebar, placement: .navigationBarLeading)
-    DefaultToolbarItem(kind: .search, placement: .bottomBar)
+    DefaultToolbarItem(kind: .sidebarToggle, placement: .navigation)
+    DefaultToolbarItem(kind: .search, placement: .primaryAction)
 }
 ```
 
@@ -257,16 +258,10 @@ search or sidebar control needs to live in a non-default slot.
 ContentView()
     .navigationTitle("Inbox")
     .navigationSubtitle("12 unread")
-    .toolbar {
-        ToolbarItem(placement: .largeSubtitle) {
-            CustomSubtitleView()       // takes precedence over navigationSubtitle
-        }
-    }
 ```
 
-`ToolbarItem(placement: .largeSubtitle)` overrides the value passed
-to `.navigationSubtitle(_:)`. Use it when the subtitle needs a custom
-view (icon + label, progress count) rather than a string.
+On macOS, use `navigationSubtitle(_:)`. There is no public macOS toolbar
+placement for a custom large subtitle view.
 
 ## Buttons
 
@@ -286,12 +281,15 @@ Button { } label: { Image(systemName: "plus") }
     .buttonBorderShape(.capsule)          // .capsule | .circle | .roundedRectangle(radius:)
 ```
 
-`.controlSize(.extraLarge)` is new on macOS 26.
+`.controlSize(.extraLarge)` shipped in macOS 14. On macOS it resolves to
+the large control metrics.
 
 ## Segmented / search / popover
 
 ```swift
-Picker("Density", selection: $d) { ForEach(...) }
+Picker("Density", selection: .constant(0)) {
+    Text("Compact").tag(0)
+}
     .pickerStyle(.segmented)
 
 View()
@@ -316,15 +314,12 @@ inspector toolbars). The default behavior keeps the field expanded.
 }
 ```
 
-Do **not** add `.presentationBackground(.glass)`; the partial detent
-triggers Liquid Glass automatically.
+Do not override the partial detent with
+`.presentationBackground(<material or color>)`; it triggers Liquid Glass automatically.
 
-Sheet morphing from a source control:
-
-```swift
-button.matchedTransitionSource(id: "newButton", in: ns)
-sheet.navigationTransition(.zoom(sourceID: "newButton", in: ns))
-```
+For a macOS sheet or popover, use the standard presentation transition.
+For related glass controls in one `GlassEffectContainer`, use shared
+`glassEffectID(_:in:)` values to morph their glass shapes.
 
 ## Concentricity
 
@@ -340,7 +335,9 @@ RoundedRectangle(cornerRadius: 28, style: .continuous)
 ## Slider with neutral value
 
 ```swift
-Slider(value: $volume, neutralValue: 0.5, in: 0...1)
+Slider(value: $volume, in: 0...1, neutralValue: 0.5) {
+    Text("Volume")
+}
 ```
 
 ## Tinting
@@ -355,11 +352,10 @@ fallbacks manually. SwiftUI auto-degrades vibrancy when those flags are on.
 Use `@Environment(\.accessibilityReduceTransparency)` only if you need to
 branch your own custom rendering.
 
-## Gaps (don't guess)
+## macOS 27 changes
 
-These were not confirmed in research — look them up before using:
-
-- `backgroundExtensionEffect()` formal parameters beyond bare invocation.
-- `presentationCornerRadius` as a *new* Liquid Glass affordance.
-- A new sidebar list-row API name beyond `List` in `NavigationSplitView`.
-- Programmatic Default-vs-Tinted user setting hook.
+- `GeometryProxy.concentricCornerRadii` (macOS 27+) resolves container radii for custom drawing.
+- Inactive windows dim more visibly on macOS 27. Dim custom views with `@Environment(\.appearsActive)` (available since macOS 10.15, not new) so they match the system chrome.
+- AppKit adds `NSGlassEffectView.effectIsInteractive`; enable it only for interactive glass.
+- System glass adapts to the user’s Clear or Tinted appearance setting in 26.1 and its 27 slider.
+- The SDK exposes no public API to read that appearance setting. Use system glass instead of branching.

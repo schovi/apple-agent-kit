@@ -88,6 +88,7 @@ struct LensHero: View {
             .resizable()
             .scaledToFill()
             .frame(width: 320, height: 320)
+            .clipShape(.rect(cornerRadius: 28))
             .layerEffect(
                 // .bundle(.module) — NOT the implicit `ShaderLibrary.default`.
                 // See "SwiftPM packaging gotchas" below.
@@ -97,7 +98,6 @@ struct LensHero: View {
                 ),
                 maxSampleOffset: CGSize(width: 32, height: 32)
             )
-            .clipShape(.rect(cornerRadius: 28))
     }
 }
 ```
@@ -247,9 +247,9 @@ struct ShaderGlass<Content: View>: View {
                 .clipShape(.rect(cornerRadius: 28))
         } else {
             content()
+                .clipShape(.rect(cornerRadius: 28))
                 .layerEffect(ShaderLibrary.bundle(.module).lensRefract(.float(0.045)),
                              maxSampleOffset: CGSize(width: 32, height: 32))
-                .clipShape(.rect(cornerRadius: 28))
         }
     }
 }

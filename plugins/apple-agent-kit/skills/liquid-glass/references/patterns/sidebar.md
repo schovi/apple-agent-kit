@@ -4,9 +4,10 @@ The Mac app shell pillar. `NavigationSplitView` (SwiftUI) or `NSSplitViewControl
 
 ## Material role
 
-`sidebar`. `NSVisualEffectView.Material.sidebar` on AppKit; auto-applied by `NavigationSplitView`'s sidebar column on SwiftUI.
+`sidebar`. Use `NSSplitViewItem(sidebarWithViewController:)` with
+`behavior = .sidebar` in AppKit. `NavigationSplitView` applies it in SwiftUI.
 
-**Do not** add a legacy `.sidebar` material on top in macOS 26 setups — its presence blocks Liquid Glass auto-application. (Anti-pattern A11.)
+**Do not** add a legacy `.sidebar` material on macOS 26 and later — its presence blocks Liquid Glass auto-application. (Anti-pattern A11.)
 
 ## SwiftUI recipe
 
@@ -39,6 +40,10 @@ struct ContentView: View {
         }
     }
 }
+
+enum SectionID: Hashable {
+    case inbox
+}
 ```
 
 `.listStyle(.sidebar)` is what makes the rows pick up the system sidebar treatment. Without it you get a flat plain list.
@@ -55,7 +60,7 @@ sidebar.maximumThickness = 320
 split.addSplitViewItem(sidebar)
 ```
 
-The `behavior = .sidebar` setting is what triggers the system sidebar material on macOS 26.
+The `behavior = .sidebar` setting triggers the system sidebar material on macOS 26 and later.
 
 ## Section structure
 
@@ -72,7 +77,8 @@ Section("Reference")   { /* 2-4 items */ }
 
 - Width: `minWidth: 220, idealWidth: 260` for Mac; `idealWidth: 320` for iPad.
 - Row height: system-driven. Don't fight it; if rows look too tall, the issue is usually a too-large `Label` icon.
-- Window-edge inset: 10 pt between window edge and sidebar outer edge. The default is correct on macOS 26.
+- macOS 26 observed an 8 pt floating inset, drawn by the system. Never recreate it.
+- macOS 27 sidebars are edge to edge. Icons are colored again and selected text is semibold.
 
 ## Inner anti-patterns
 

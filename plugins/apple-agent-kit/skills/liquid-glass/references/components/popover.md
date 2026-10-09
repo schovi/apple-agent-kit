@@ -44,7 +44,7 @@ keeps it open when the user clicks back into the app.
 
 ## Glass is automatic
 
-The popover surface is system-rendered Regular glass on macOS 26.
+The popover surface is system-rendered Regular glass on macOS 26 and later.
 Never add `.glassEffect` to the popover content — that nests glass
 (A1) and breaks the system treatment.
 

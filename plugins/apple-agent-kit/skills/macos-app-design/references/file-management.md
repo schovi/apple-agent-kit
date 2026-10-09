@@ -61,6 +61,13 @@ struct MyDocumentApp: App {
 
 `DocumentGroup` handles New / Open / Save / Duplicate / Versions / autosave / file extensions automatically. Override individual menu items via `.commands { ... }` only when you have a reason.
 
+The document model API depends on the deployment target:
+
+- **macOS 27+**: conform to the `Document` protocol (`ReadableDocument` + `WritableDocument`). `FileDocument` and `ReferenceFileDocument` are deprecated; do not use them in new code. Register every edit with the undo manager: SwiftUI uses the undo stack to detect changes, so autosave silently stops without it.
+- **macOS 14–26**: `FileDocument` (value type) or `ReferenceFileDocument` (class).
+
+For the `Document` protocol's exact signatures, load Apple's `building-document-based-swiftui-applications` skill (bundled with Xcode 27) instead of guessing.
+
 ## AppKit
 
 `NSDocument` subclass + `NSDocumentController` for document-based apps. Handles the same surface with more knobs.

@@ -7,7 +7,7 @@ two spots, it should *morph*.
 
 ```swift
 @Namespace private var ns
-@State private var expanded = false
+@Binding var expanded: Bool
 
 GlassEffectContainer(spacing: 24) {
     Button(expanded ? "Collapse" : "Expand") {
@@ -28,19 +28,11 @@ GlassEffectContainer(spacing: 24) {
 }
 ```
 
-Cross-distance variant — for participants that are not direct siblings
-(e.g. one in the toolbar, one in the content area):
-
-```swift
-toolbarButton
-    .matchedTransitionSource(id: "primary", in: ns)
-
-contentPill
-    .navigationTransition(.zoom(sourceID: "primary", in: ns))
-```
+For a macOS sheet or popover, use its standard transition. For glass
+participants that need to morph, keep them in one `GlassEffectContainer`.
 
 For longer-lived shared identity across containers, use
-`.glassEffectUnion(id:in:)`:
+`.glassEffectUnion(id:namespace:)`:
 
 ```swift
 sidebarChip.glassEffectUnion(id: "selected", namespace: ns)
@@ -116,6 +108,5 @@ All four must hold for the morph to actually run:
 - macOS 26 toolbars morph internally when an item's prominence changes
   (e.g. `.glassProminent` toggled on). You rarely need to wire
   morphing inside the toolbar yourself.
-- A morph triggered by a *navigation* transition uses
-  `.matchedTransitionSource(id:in:)` + `.navigationTransition(.zoom(...))`
-  on the destination, not `glassEffectID`.
+- `.navigationTransition(.zoom(sourceID:in:))` is unavailable on macOS.
+  Use a standard sheet or popover transition, or morph glass in one container.

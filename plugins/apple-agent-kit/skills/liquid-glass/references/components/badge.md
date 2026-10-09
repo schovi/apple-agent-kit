@@ -33,7 +33,7 @@ struct StatusBadge: View {
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 8)
             .padding(.vertical, 2)
-            .frame(minHeight: 20, minWidth: 20)
+            .frame(minWidth: 20, minHeight: 20)
             .foregroundStyle(foreground)
             .background(Capsule().fill(background))
     }

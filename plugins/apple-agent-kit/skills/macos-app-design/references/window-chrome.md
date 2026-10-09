@@ -1,14 +1,18 @@
 # Window chrome
 
-The numeric rules that separate "credible Mac app" from "Electron with blur." Most are system-driven on macOS 26, but you have to opt into them; defaults are conservative.
+The rules that separate "credible Mac app" from "Electron with blur." The system draws most of the chrome; your job is to opt in and not fight it.
 
 ## Outer radius and padding
 
-- Window outer corner radius: **28**. The system rounds the window mask; you don't pick a radius unless you draw your own border. Concentric inner shapes resolve from `Tokens.Radius.xl`.
-- Padding between window outer edge and sidebar / content: **8** (`Tokens.Spacing.controlGap`).
-- Sidebar outer radius: `28 − 8 = 20`. Use `ConcentricRectangle()` in the sidebar's `.containerShape`.
+The system owns the window corner radius, and it changes between releases: macOS 26 rounded windows to about 28 pt, and macOS 27 uses a tighter radius on every window. **Never hard-code it.**
+
+- SwiftUI: derive inner corners with `ConcentricRectangle()` and `.containerShape(...)`, so they follow whatever the window uses.
+- AppKit on macOS 27+: override `viewDidChangeEffectiveCornerRadii()` and apply the view's `effectiveCornerRadii` to your layer. `NSView.cornerConfiguration` is read-only for custom views. On macOS 26, use manual radii and treat 28 pt as an observation, not a contract.
+- Sidebars: on macOS 26 the system draws the sidebar as an inset floating panel (about 8 pt from the window edge). On macOS 27 sidebars run edge to edge. In both cases `NavigationSplitView` / `NSSplitViewController` with `.sidebar` behavior draws it. Never build the inset yourself.
 
 ## Titlebar heights
+
+Observed on macOS 26. The system sets these; use them only to size custom content that must line up with the titlebar, and re-check on each release.
 
 | Variant | Height |
 |---|---|
@@ -22,7 +26,7 @@ The modern Mac app look. Pulls content under the titlebar, sidebar up next to th
 
 ```swift
 // SwiftUI
-@main struct App: App {
+@main struct NotesApp: App {
     var body: some Scene {
         WindowGroup { ContentView() }
             .windowToolbarStyle(.unified(showsTitle: true))
@@ -42,7 +46,7 @@ window.toolbarStyle = .unified
 
 ## Traffic lights
 
-12 × 12 each, 8 px gap, cluster starts 14 px from window left edge. Vertical center = first sidebar row center.
+Observed on macOS 26: 12 × 12 each, 8 px gap, cluster starts 14 px from the window's left edge, vertically centered on the first sidebar row.
 
 Do **not** reposition them. The system draws them; align your sidebar to them, not the other way around. In SwiftUI / AppKit on macOS 26 the system positions them automatically when `fullSizeContentView` is set and the sidebar uses `NavigationSplitView` / `NSSplitViewController` with `.sidebar` behavior.
 
@@ -62,13 +66,13 @@ SomeContentView()
     .navigationSubtitle("142 unread")
 ```
 
-Smaller-weight string after the title. For a custom subtitle view, use `ToolbarItem(placement: .largeSubtitle)` — that placement renders the supplied view in the secondary title slot.
+Smaller-weight string after the title. A custom subtitle view (`ToolbarItem(placement: .largeSubtitle)`) is iOS and iPadOS only; on macOS use `.navigationSubtitle(_:)`.
 
 ## What to refuse
 
 - "Make the window borderless / no titlebar." Hides system affordances. Users navigate by traffic lights.
 - "Custom traffic lights." Apple positions them; do not redraw.
-- "Different outer radius." 28 is the macOS 26 window corner. Picking 16 or 20 reads as iOS sheet.
+- "Different outer radius." The window radius belongs to the system and changes between releases. Hard-coding any number (16, 20, 28) breaks concentricity on the next macOS.
 - "Two toolbars." A13. Compose one.
 
 ## AppKit-specific

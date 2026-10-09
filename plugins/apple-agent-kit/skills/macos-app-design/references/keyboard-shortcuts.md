@@ -70,14 +70,19 @@ For non-menu shortcuts, override `keyDown(with:)` on the focused
 `event.modifierFlags`:
 
 ```swift
-override func keyDown(with event: NSEvent) {
-    let chars = event.charactersIgnoringModifiers ?? ""
-    let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-    switch (chars, mods) {
-    case ("j", []): selectNext()
-    case ("k", []): selectPrevious()
-    default: super.keyDown(with: event)
+final class ListKeyboardView: NSView {
+    override func keyDown(with event: NSEvent) {
+        let chars = event.charactersIgnoringModifiers ?? ""
+        let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        switch (chars, mods) {
+        case ("j", []): selectNext()
+        case ("k", []): selectPrevious()
+        default: super.keyDown(with: event)
+        }
     }
+
+    private func selectNext() { }
+    private func selectPrevious() { }
 }
 ```
 

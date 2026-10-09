@@ -46,8 +46,9 @@ Use the variant API and trust the system.
 
 ## A4 — Invented component dimensions
 
-Touch / click targets are 44 × 44 pt minimum. Button heights, paddings,
-icon sizes come from `references/tokens.md`.
+Use the default macOS control size, 28 × 28 pt. Never go below 20 × 20 pt.
+Custom hit areas must be at least 24 × 24 pt. See
+`macos-app-design/references/accessibility.md`.
 Do not improvise a "looks right" size.
 
 ## A5 — Capsule miscalculation
@@ -61,11 +62,8 @@ Native fix: use `.buttonBorderShape(.capsule)` (SwiftUI) or
 
 ## A6 — Broken concentricity
 
-Window outer radius = 28 pt, toolbar inner pill radius = 24 pt, inset
-between them is 4 pt → 24 + 4 = 28 ✓.
-
-Wrong: outer 28 pt, inner pill 28 pt (no inset apparent).
-Wrong: outer 28 pt, inner pill 16 pt (visible "jump" where curves diverge).
+Never hard-code the window radius. macOS 26’s 28 pt radius was observed,
+not published. macOS 27 uses a tighter uniform system radius.
 
 SwiftUI fix: declare `.containerShape(...)` on the parent and use
 `ConcentricRectangle()` on children to inherit the resolved curvature.
@@ -84,11 +82,12 @@ labels.
 Clear glass without a dim layer behind it on rich media (photo, video,
 heavy gradient) drops contrast below WCAG AA. Either:
 
-- Add a `Color.black.opacity(0.24)` layer behind the Clear surface, or
+- Add a `Color.black.opacity(0.35)` layer behind the Clear surface, or
 - Switch to Regular.
 
 If you can't guarantee a dim layer at build time (e.g. user-supplied
 media), default to Regular.
+See [HIG Materials](https://developer.apple.com/design/human-interface-guidelines/materials).
 
 ## A9 — Fighting system accessibility flags
 
@@ -127,14 +126,14 @@ They sit alongside A1-A10 in the same audit ID space.
 
 Keeping `NSVisualEffectMaterial.sidebar` (or the SwiftUI equivalent) on
 a sidebar hierarchy *blocks* Liquid Glass. Removing it is what enables
-the new material on macOS 26. Migrations often look "broken" because
+the new material on macOS 26 and later. Migrations often look "broken" because
 the engineer left the legacy material in place.
 
-## A12 — `.presentationBackground(.glass)` stacked on `.presentationDetents`
+## A12 — Custom presentation background stacked on `.presentationDetents`
 
 A sheet with `.presentationDetents` (partial detent) already renders
-its background as glass. Adding `.presentationBackground(.glass)` on
-top produces double glass. Pick one.
+its background as glass. Do not override it with
+`.presentationBackground(<material or color>)` at a partial detent.
 
 ## A13 — Two `.toolbar` modifiers in different ancestors
 
@@ -178,7 +177,7 @@ AppKit equivalent: wrap the change in
 ## A19 — Morph across separate `GlassEffectContainer`s
 
 Participants in different containers never morph. Move them into the
-same container, or use `.glassEffectUnion(id:in:)` for cross-distance
+same container, or use `.glassEffectUnion(id:namespace:)` for cross-distance
 identity.
 
 ## A20 — `GlassEffectContainer(spacing:)` set to a middle value
@@ -191,8 +190,8 @@ wrong as a resting visual. Pick `spacing: ≥ gap` for a fused pill,
 
 ## A21 — Mixed `.soft` and `.hard` scroll edge styles
 
-Mixing `.soft` and `.hard` on adjacent edges of one scroll view
-fights itself. Pick one boundary character.
+The HIG says to prefer `.automatic` and apply one effect per view. Do not
+mix explicit `.soft` and `.hard` styles on adjacent edges.
 
 ## A22 — Scroll-edge effect with no overlapping chrome
 
@@ -200,11 +199,11 @@ Edge effects are not decoration — they hand off content to floating
 chrome (toolbar, search bar). If nothing overlaps the scroll view,
 strip the modifier.
 
-## A23 — Icon + label glued into one tap target
+## A23 — Two actions merged into one tap target
 
-A glyph and a label inside the same button read as one affordance
-with two tap zones. Pick icon-only or label-only per button. If you
-genuinely need both behaviors, give them their own affordances.
+A normal icon-and-label button is valid: `Label("New", systemImage: "plus")`.
+Do not make the icon run one action and the label another, or make both
+separately tappable inside one visual pill. Give each action its own control.
 
 ## A24 — `.glassProminent` + `.circle` border shape artifact
 

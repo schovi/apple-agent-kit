@@ -1,11 +1,13 @@
 ---
 name: liquid-glass
-description: Build authentic macOS 26 (Tahoe) Liquid Glass surfaces in SwiftUI or AppKit. Use when the user asks to add Liquid Glass to a Mac app or write AppKit using NSGlassEffectView / NSGlassEffectContainerView. Material-focused — for HIG conformance, menu bar, multi-window, keyboard shortcuts, system primitives, app icon, or general Mac UX, use the sibling skill `macos-app-design` instead.
+description: Build authentic Liquid Glass surfaces for macOS 26 (Tahoe) and macOS 27 in SwiftUI or AppKit. Use when the user asks to add Liquid Glass to a Mac app or write AppKit using NSGlassEffectView / NSGlassEffectContainerView. Material-focused — for HIG conformance, menu bar, multi-window, keyboard shortcuts, system primitives, app icon, or general Mac UX, use the sibling skill `macos-app-design` instead.
 ---
 
-# Liquid Glass — macOS 26 material
+# Liquid Glass — macOS 26+ material
 
 This skill turns "build a Liquid Glass surface" into deterministic SwiftUI or AppKit code that uses the *real* Apple APIs (`.glassEffect`, `NSGlassEffectView`, `ConcentricRectangle`, `.buttonStyle(.glassProminent)`, etc.).
+
+Targets macOS 26 and later. macOS 27 re-tuned the material (tighter window corners, edge-to-edge sidebars, automatic scroll-edge hardening under titles, interactive glass bounce) and lets the user choose a clear-to-tinted glass look; apps using system glass adapt without code changes. See the "macOS 27 changes" sections in `references/swiftui.md` and `references/appkit.md`.
 
 **Scope is the material only.** Layout primitives, menu bar conformance, multi-window scenes, keyboard shortcuts, system primitives (alerts/dialogs/tooltips), app icon, and general accessibility live in the sibling skill `macos-app-design`. Compose the two: most Mac apps need both.
 
@@ -19,7 +21,7 @@ This skill turns "build a Liquid Glass surface" into deterministic SwiftUI or Ap
    - Three-column app: `NavigationSplitView { sidebar } content: { detail } detail: { inspector }` (SwiftUI) or `NSSplitViewController` with `.sidebar` / `.inspector` behaviors (AppKit).
    - Single-column app with toolbar: standard `Scene` + `.toolbar` (SwiftUI) or unified `NSToolbar`.
 3. **Put glass where it belongs** — see `references/where-glass-goes.md`.
-4. **Honor concentricity** — outer corner radius = inner pill radius + inset. Use `ConcentricRectangle()` + `.containerShape(...)` in SwiftUI; manual radii in AppKit.
+4. **Honor concentricity** — outer corner radius = inner pill radius + inset. Use `ConcentricRectangle()` + `.containerShape(...)` in SwiftUI. In AppKit on macOS 27+, override `viewDidChangeEffectiveCornerRadii()` and apply `effectiveCornerRadii`; on macOS 26 use manual radii. Never hard-code the window radius: the system owns it and it changed in macOS 27.
 5. **Apply tokens** — read radius, spacing, motion from `references/tokens.md`. Do not invent new values.
 6. **Accessibility flags are system-driven** — AppKit / SwiftUI auto-degrade vibrancy when `reduceTransparency`, `increaseContrast`, `reduceMotion` are on. Do not fight them. (Full WCAG mapping for non-glass surfaces: `macos-app-design/references/accessibility.md`.)
 7. **Avoid every anti-pattern** in `references/anti-patterns.md`.
@@ -27,18 +29,18 @@ This skill turns "build a Liquid Glass surface" into deterministic SwiftUI or Ap
 ## Output rules
 
 - Never invent numeric blur, saturation, or opacity. Apple publishes no portable numeric values; the material is real-time rendered.
-- Prefer Regular glass. Use Clear only over rich media with a dim layer behind it.
+- Prefer Regular glass. Use Clear only over rich media, with a dimming layer (about 35% black, per HIG Materials) when the media is bright.
 - Never put one glass surface inside another (`GlassEffectContainer` merges into ONE shared sampling pass, not nesting).
 - Never put glass behind body text, forms, dense tables, or page backgrounds.
-- Use the system-provided treatment — don't hand-roll a `CGAffineTransform` or layer hack to imitate Liquid Glass. If the user is on macOS < 26, the answer is "this feature requires macOS 26", not "fake it".
+- Use the system-provided treatment — don't hand-roll a `CGAffineTransform` or layer hack to imitate Liquid Glass. When the deployment target is below macOS 26, gate glass with `if #available(macOS 26, *)` in one shared modifier and give older systems a non-glass fallback.
 - Never claim "Apple-official" or "Apple-certified".
 
 ## When to refuse or downgrade
 
-- If the user asks for "Liquid Glass on macOS 14" — refuse. Liquid Glass needs macOS 26. Do not fake it on older macOS.
+- If the user asks for "Liquid Glass on macOS 14" — explain that Liquid Glass renders only on macOS 26+. Offer the gated version: glass on 26+, classic `Material` or an opaque surface on 14–15. Never fake glass with blur.
 - If the user asks to put glass behind a long article — refuse and propose a solid surface.
-- If the user asks for Clear glass without a dim layer — silently switch to Regular.
-- If the user removes `.sidebar` material expecting Liquid Glass to disappear — explain: on macOS 26, *removing* the legacy `.sidebar` material is what *enables* Liquid Glass on the sidebar.
+- If the user asks for Clear glass over bright content without a dimming layer — add the dimming layer, or use Regular, and say which one you chose and why in one line. Do not change the variant silently.
+- If the user removes `.sidebar` material expecting Liquid Glass to disappear — explain: on macOS 26+, *removing* the legacy `.sidebar` material is what *enables* Liquid Glass on the sidebar.
 
 ## Self-audit before returning
 
@@ -53,14 +55,14 @@ Core (A1-A10):
 - A5 — capsule miscalculation
 - A6 — broken concentricity
 - A7 — mixed Regular and Clear in one group
-- A8 — unreadable Clear glass (no dim)
+- A8 — unreadable Clear glass (no dimming layer over bright content)
 - A9 — fighting system accessibility flags
 - A10 — Apple-endorsement claims
 
-macOS 26 gotchas (A11-A24):
+macOS 26+ gotchas (A11-A24):
 
 - A11 — legacy `.sidebar` material retained
-- A12 — `.presentationBackground(.glass)` stacked on `.presentationDetents`
+- A12 — overriding a partial-detent sheet's system glass with `.presentationBackground(...)`
 - A13 — two `.toolbar` modifiers in different ancestors
 - A14 — `.glassEffect` placed mid-chain
 - A15 — materials wrapping the control instead of styling it
@@ -69,20 +71,20 @@ macOS 26 gotchas (A11-A24):
 - A18 — morph without `withAnimation`
 - A19 — morph across separate `GlassEffectContainer`s
 - A20 — `GlassEffectContainer(spacing:)` set to a middle value
-- A21 — mixed `.soft` / `.hard` scroll edge styles on one scroll view
+- A21 — more than one scroll edge style on one scroll view (prefer `.automatic`)
 - A22 — scroll-edge effect with no overlapping chrome
-- A23 — icon + label glued into one tap target
+- A23 — two actions merged into one hit target (a plain icon + label button is fine)
 - A24 — `.glassProminent` + `.circle` border shape artifact
 
 Performance budget (`references/performance-budget.md`):
 
-- B1 — more live-blurred surfaces per pane than the hard ceiling (6). A `GlassEffectContainer` counts as one surface; share sampling instead of stacking.
+- B1 — more live-blurred surfaces per pane (glass and classic backdrop materials) than the kit defaults: 3 at rest, 6 ceiling. A `GlassEffectContainer` counts as one surface. The numbers are kit defaults from observed cost, not Apple limits; exceeding them needs an Instruments profile, not a rewrite by reflex.
 
 Forbidden surfaces (`references/when-not-to-use-glass.md`, review-only):
 
 - F1 — glass on the window background
 - F2 — glass behind long-form text (catches what A2 misses)
-- F3 — glass behind forms / inputs
+- F3 — glass behind forms and data entry (a single search or command field in a floating glass control is fine)
 - F4 — glass behind dense tables
 - F5 — glass on glass (matches A1 conceptually; cite when the issue is *where* glass goes)
 
@@ -90,7 +92,7 @@ Forbidden surfaces (`references/when-not-to-use-glass.md`, review-only):
 
 - Not an Apple-official design system.
 - Not a port of Apple internal rendering values — Apple publishes none.
-- Not a Liquid Glass polyfill for older macOS — the APIs only exist on macOS 26.
+- Not a Liquid Glass polyfill for older macOS — the APIs exist on macOS 26 and later only.
 - Not the place for HIG conformance, menu bar, file management, multi-window, keyboard shortcuts, icon, or general accessibility — see `macos-app-design`.
 
 ## Reference map

@@ -6,7 +6,7 @@ Liquid Glass is optional inside a custom design. Pick one strategy per app, then
 
 | Strategy | What it means | Good fit |
 |---|---|---|
-| **Standard adoption** | Rebuild on macOS 26 SDK. System toolbars, sidebars, sheets, menus, and controls pick up glass. Add no glass yourself | Apps built mostly from system structure; teams with low design capacity |
+| **Standard adoption** | Rebuild on the macOS 26+ SDK. System toolbars, sidebars, sheets, menus, and controls pick up glass. Add no glass yourself | Apps built mostly from system structure; teams with low design capacity |
 | **Selective adoption** | Standard adoption plus glass on a few custom controls that float over content (a canvas toolbar, a playback HUD, a floating action group) | Custom apps with a clear content layer and a few overlay controls |
 | **Restrained surfaces** | Keep the system chrome the OS provides. Make custom content and panels calm: opaque or classic `Material` surfaces | Dense pro tools, reading and editing apps, data-heavy views where clarity wins |
 
@@ -31,10 +31,10 @@ Identity lives in composition, typography, color, content, and interaction. Glas
 
 ## Decide which layer owns the material
 
-System toolbars, sidebars, and scroll-edge effects manage their own material on macOS 26. Conflicts look broken: double backgrounds, muddy edges, lost scroll-edge treatment.
+System toolbars, sidebars, and scroll-edge effects manage their own material on macOS 26+, and macOS 27 changed several of them (edge-to-edge sidebars, scroll-edge hardening under titles). Conflicts look broken: double backgrounds, muddy edges, lost scroll-edge treatment.
 
 - Do not paint a custom background behind a system toolbar or sidebar to "match the brand". Let the system own it, or own it fully with a custom surface and no system material on that layer.
-- Remove legacy sidebar materials on macOS 26 so the system glass applies (`liquid-glass` A11).
+- Remove legacy sidebar materials on macOS 26+ so the system glass applies (`liquid-glass` A11).
 - Use one toolbar owner per window (`liquid-glass` A13).
 - Coordinate custom headers with scroll-edge effects: `liquid-glass/references/patterns/scroll-edge-effects.md`.
 
@@ -67,6 +67,7 @@ Check every glass or translucent surface under:
 - Increase Contrast.
 - Reduce Transparency (system glass degrades on its own; do not fight it, `liquid-glass` A9).
 - Reduce Motion (morphs and transitions).
+- The user's Liquid Glass look (clear to tinted; a toggle in macOS 26.1, a slider in macOS 27). System glass follows it; custom translucent surfaces do not, so check that they still match at both ends.
 - Changing backgrounds: scroll busy content, images, and both appearances behind the surface. Text and icons must stay readable.
 
 ## Performance

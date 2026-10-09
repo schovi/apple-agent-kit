@@ -1,6 +1,6 @@
 # AppKit cheat-sheet
 
-Confirmed APIs for AppKit on macOS 26. Sources and maintainer provenance live
+Confirmed APIs for AppKit on macOS 26 and later. Sources and maintainer provenance live
 in the apple-agent-kit repository's `docs/resources.md` (§ B–D). Do not invent API names.
 
 ## Glass material
@@ -36,7 +36,12 @@ For multiple grouped glass capsules in a toolbar:
 
 ```swift
 let container = NSGlassEffectContainerView()
-container.subviews = [reply, forward, archive, delete]
+let content = NSView()
+content.addSubview(reply)
+content.addSubview(forward)
+content.addSubview(archive)
+content.addSubview(delete)
+container.contentView = content
 // container.spacing defaults to 0 — suitable for batch sampling
 // without merging. Raise it only when close siblings should fuse.
 ```
@@ -51,7 +56,7 @@ names. macOS 26 layers Liquid Glass on top of these where it applies.
 | `.titlebar` | Title bar background. |
 | `.menu` | Menu surface. |
 | `.popover` | Popover surface. |
-| `.sidebar` | Legacy sidebar — **remove on macOS 26** so Liquid Glass picks up. |
+| `.sidebar` | Legacy sidebar — **remove on macOS 26 and later** so Liquid Glass picks up. |
 | `.headerView` | Section headers. |
 | `.sheet` | Sheet background. |
 | `.windowBackground` | Window background. |
@@ -85,7 +90,7 @@ content avoid the rounder window corners introduced in macOS 26.
 let splitVC = NSSplitViewController()
 
 let sidebarItem = NSSplitViewItem(sidebarWithViewController: sidebarVC)
-sidebarItem.behavior = .sidebar   // Liquid Glass auto on macOS 26
+sidebarItem.behavior = .sidebar   // Liquid Glass auto on macOS 26 and later
 
 let contentItem = NSSplitViewItem(viewController: contentVC)
 contentItem.automaticallyAdjustsSafeAreaInsets = true
@@ -106,6 +111,10 @@ Both get the scroll-edge effect automatically.
 ## Toolbar
 
 ```swift
+extension NSToolbar.Identifier {
+    static let mainToolbar = Self("com.example.main-toolbar")
+}
+
 let toolbar = NSToolbar(identifier: .mainToolbar)
 toolbar.displayMode = .iconOnly
 toolbar.allowsUserCustomization = true
@@ -123,7 +132,7 @@ New (macOS 26):
 
 - `NSToolbarItem.style = .prominent`
 - `NSToolbarItem.backgroundTintColor = ...`
-- `NSItemBadge.count(_:)`, `.text(_:)`, `.indicator(...)`
+- `NSItemBadge.count(_:)`, `.text(_:)`, `.indicator`
 
 ## Push button (glass)
 
@@ -146,30 +155,31 @@ slider.tintProminence = .primary
 
 ## Sheets / popovers / menus
 
-- `NSWindow.beginSheet(_:completionHandler:)` — material `.sheet`, morphs in from presenting control on macOS 26.
+- `NSWindow.beginSheet(_:completionHandler:)` — material `.sheet`, morphs in from presenting control on macOS 26 and later.
 - `NSPopover` — material `.popover`. Set `behavior = .transient` for hover-dismiss.
-- `NSMenu` — material `.menu`. Redesigned single-column icon-led rows. Use SF Symbols.
+- `NSMenu` — material `.menu`. Use images only where they carry meaning.
+  On macOS 27, set `item.preferredImageVisibility = .visible` to opt in.
 
 ## Scroll edge effects
 
-Per-edge accessors on `NSScrollView`. Controls how scroll content
-fades or hardens at edges that sit beneath floating chrome. Full
-rules in `references/patterns/scroll-edge-effects.md`.
+Set the preference on the titlebar or split-view accessory that overlaps
+the scrolling content. Full rules live in `references/patterns/scroll-edge-effects.md`.
 
 ```swift
-scrollView.topEdgeEffect.style    = .hard
-scrollView.bottomEdgeEffect.style = .soft
-scrollView.leftEdgeEffect.isHidden = true
+if #available(macOS 26.1, *) {
+    titlebarAccessory.preferredScrollEdgeEffectStyle = .automatic
+}
 ```
 
-- `.style`: `.soft` (default) or `.hard`.
-- `.isHidden`: drop the effect on edges where no chrome actually sits.
-- One style per edge. Never mix soft + hard on adjacent edges of the
-  same scroll view.
+- `.automatic` is the default. Choose `.soft` or `.hard` only when the
+  accessory needs it.
+- AppKit resolves `.automatic` to `.hard` when free-floating title text
+  overlaps the content.
+- Apply one effect per accessory. Do not mix explicit styles on one view.
 
 ## Source list sidebar
 
-`NSOutlineView` in source-list style. On macOS 26, rows render directly on
+`NSOutlineView` in source-list style. On macOS 26 and later, rows render directly on
 the new glass — drop any legacy `.sidebar` vibrancy layer.
 
 ## Sample patterns
@@ -178,27 +188,35 @@ the new glass — drop any legacy `.sidebar` vibrancy layer.
 
 ```swift
 let pill = NSGlassEffectContainerView()
+let content = NSView()
+pill.contentView = content
 for symbol in ["arrowshape.turn.up.left", "arrowshape.turn.up.right", "archivebox", "trash"] {
     let b = NSButton(image: NSImage(systemSymbolName: symbol, accessibilityDescription: nil)!,
                      target: nil, action: nil)
     b.bezelStyle = .glass
     b.borderShape = .capsule
-    pill.addSubview(b)
+    content.addSubview(b)
 }
 ```
 
 ### Concentric corners
 
 ```swift
-window.contentView?.wantsLayer = true
-window.contentView?.layer?.cornerRadius = 28
-
-let inner = NSGlassEffectView()
-inner.cornerRadius = 20   // 28 − 8 inset
+if #available(macOS 27, *) {
+    let radii = window.contentView?.effectiveCornerRadii
+    // Override viewDidChangeEffectiveCornerRadii() to apply radii in custom drawing.
+    _ = radii
+} else {
+    // macOS 26's 28 pt window radius was observed, not a portable token.
+    let inner = NSGlassEffectView()
+    inner.cornerRadius = 20
+}
 ```
 
-## Gaps (don't guess)
+## macOS 27 changes
 
-- The exact `NSToolbar` / `NSToolbarItem` API spelling for `ToolbarSpacer` equivalent (SwiftUI has it; AppKit equivalent not confirmed).
-- The new `NSView.LayoutRegion` / `safeArea(cornerAdaptation:)` formal signature.
-- `NSGlassEffectView` initializer variants beyond the bare constructor.
+- `NSGlassEffectView.effectIsInteractive` adds click feedback. Use it sparingly.
+- `NSView.effectiveCornerRadii` and `viewDidChangeEffectiveCornerRadii()` expose resolved corners.
+- `NSView.cornerConfiguration` is read-only. The SDK has no public setter for arbitrary views.
+- `NSMenuItem.preferredImageVisibility = .visible` opts an image into macOS 27 menus.
+- System glass adapts to the user’s appearance setting. The SDK has no public reader for it.

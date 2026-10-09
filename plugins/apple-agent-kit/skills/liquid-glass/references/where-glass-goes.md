@@ -21,7 +21,7 @@ content. The rules below follow Apple's HIG (sourced from WWDC25 session
 
 - **Page background** (F1). Glass needs something behind it. The page is the *something behind*, not the something glass.
 - **Long-form text containers** (F2). Glass shimmers under scroll and pulls contrast below WCAG AA on busy backdrops (NN/g documented this on iOS 26 Lock Screen; Infinum on Control Center).
-- **Forms and input fields** (F3). Glass behind text fields breaks contrast under autocomplete / validation states. Use a solid input.
+- **Forms and data-entry surfaces** (F3). Keep their fields solid. A single toolbar or command-palette search field may sit inside glass.
 - **Dense data tables** (F4). Glass under tables erodes legibility row-by-row.
 - **Anything that sits behind another glass element** (F5, "glass-on-glass"). Two stacked glass surfaces produce no real refraction and read as muddy; on macOS 26 / iOS 26 the inner element can fail to render (JuniperPhoton documented an iOS 26.1 `Menu`-in-`GlassEffectContainer` regression).
 
@@ -45,7 +45,7 @@ Full failure cases and citations live in `when-not-to-use-glass.md`
 
 ### Sheets
 - Liquid Glass on `.sheet` is automatic when `.presentationDetents` includes a partial-height detent (`.medium`, `.large`, `.fraction`, `.height`).
-- Do **not** add `.presentationBackground(.glass)` on top — it's redundant.
+- Do not override a partial detent with `.presentationBackground(<material or color>)`.
 
 ### Background extension
 - Use `.backgroundExtensionEffect()` (SwiftUI) or `NSBackgroundExtensionView` (AppKit) on hero art so it shows through under the floating sidebar / inspector.

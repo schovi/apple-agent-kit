@@ -61,12 +61,12 @@ struct ShaderHeroSection: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         }
         .frame(width: 280, height: 280)
-        .modifier(LensRefractIfAvailable(strength: 0.08, enabled: !reduceTransparency))
         .clipShape(.rect(cornerRadius: Tokens.Radius.xl))
         .overlay(
             RoundedRectangle(cornerRadius: Tokens.Radius.xl, style: .continuous)
                 .stroke(Color.white.opacity(reduceTransparency ? 0.6 : 0.15), lineWidth: 1)
         )
+        .modifier(LensRefractIfAvailable(strength: 0.08, enabled: !reduceTransparency))
     }
 
     private var explainer: some View {
@@ -143,4 +143,3 @@ private struct LensRefractIfAvailable: ViewModifier {
         }
     }
 }
-

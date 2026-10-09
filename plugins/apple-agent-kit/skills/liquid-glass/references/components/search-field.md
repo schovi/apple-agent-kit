@@ -48,17 +48,29 @@ HStack(spacing: 6) {
 ## AppKit
 
 ```swift
-let search = NSSearchField()
-search.placeholderString = "Search…"
-search.delegate = self  // implements controlTextDidChange(_:)
+final class SearchFieldOwner: NSObject, NSSearchFieldDelegate {
+    let search = NSSearchField()
+
+    override init() {
+        super.init()
+        search.placeholderString = "Search…"
+        search.delegate = self
+    }
+
+    func controlTextDidChange(_ notification: Notification) { }
+}
 ```
 
 For toolbar placement, wrap in `NSSearchToolbarItem`:
 
 ```swift
-let item = NSSearchToolbarItem(itemIdentifier: .search)
-item.preferredControlPosition = .leading
-toolbar.insertItem(withItemIdentifier: .search, at: 0)
+extension NSToolbarItem.Identifier {
+    static let search = Self("com.example.search")
+}
+
+func makeSearchToolbarItem() -> NSSearchToolbarItem {
+    NSSearchToolbarItem(itemIdentifier: .search)
+}
 ```
 
 ## Geometry

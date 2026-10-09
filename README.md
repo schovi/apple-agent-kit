@@ -9,7 +9,6 @@ An agent plugin for building Mac apps that feel like Mac apps. Install it into C
 | `macos-app-design` | HIG conformance: menu bar order, multi-window, keyboard shortcuts, file management, system primitives, app icon, accessibility. macOS 14+ |
 | `liquid-glass` | The macOS 26+ Liquid Glass material via the real `glassEffect` / `NSGlassEffectView` / `ConcentricRectangle` APIs. Anti-patterns, performance budget, Metal shaders |
 | `design-custom-macos-apps` | A distinctive custom UI that keeps Mac behavior: customization levels, glass strategy, maintenance cost, review checklist, case studies |
-| `ios-app-design` | Placeholder |
 
 Subagents (Claude Code only): `apple-app-reviewer` (read-only review), `liquid-glass-implementer`, `liquid-glass-shader-implementer`.
 
@@ -48,6 +47,14 @@ Liquid Glass shipped with documented readability problems ([NN/g](https://www.nn
 
 A glass surface inside an otherwise non-native app still feels wrong. That is why `macos-app-design` exists next to `liquid-glass`.
 
+### Next to Apple's own skills
+
+Xcode 27 ships Apple-written agent skills (`swiftui-specialist`, `swiftui-whats-new-27`, `building-document-based-swiftui-applications`, `uikit-app-modernization`, and others). They cover SwiftUI code correctness, data flow, performance, new APIs, and document apps. None of them cover Liquid Glass, the menu bar, HIG conformance, or accessibility review. This kit covers those and defers to Apple's skills where both apply.
+
+### Verified against the SDK
+
+Every Swift snippet in the plugin is typechecked against the installed macOS SDK with `tools/check-swift-snippets.py`. Current baseline: Xcode 27, macOS 27 SDK, deployment target macOS 26.
+
 ## Showcase
 
 ```bash
@@ -64,8 +71,7 @@ plugins/apple-agent-kit/
 ├── skills/
 │   ├── liquid-glass/              macOS 26+ glass material
 │   ├── macos-app-design/          HIG / Mac craft
-│   ├── design-custom-macos-apps/  custom UI that keeps Mac behavior
-│   └── ios-app-design/            placeholder
+│   └── design-custom-macos-apps/  custom UI that keeps Mac behavior
 └── agents/                        reviewer + implementers
 examples/macos-native-swift/       SwiftUI showcase
 docs/                              install guides + source dossier

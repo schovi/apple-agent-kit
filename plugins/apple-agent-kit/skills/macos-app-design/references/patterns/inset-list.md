@@ -45,13 +45,25 @@ highlight rendering.
 When the same list is used as the app sidebar:
 
 ```swift
-NavigationSplitView {
-    List(selection: $selection) {
-        ForEach(SectionGroup.allCases) { group in
-            Section(group.label) { ... }
+struct SidebarList: View {
+    enum SectionGroup: String, CaseIterable, Identifiable {
+        case recents, pinned
+        var id: Self { self }
+        var label: String { rawValue.capitalized }
+    }
+
+    var body: some View {
+        NavigationSplitView {
+            List(selection: .constant(SectionGroup.recents)) {
+                ForEach(SectionGroup.allCases) { group in
+                    Section(group.label) { Text(group.label) }
+                }
+            }
+            .listStyle(.sidebar)
+        } detail: {
+            Text("Detail")
         }
     }
-    .listStyle(.sidebar)
 }
 ```
 
@@ -60,13 +72,12 @@ stay solid.
 
 ## AppKit
 
-For non-hierarchical inset lists, use `NSCollectionView` with grouped
-section layout. For hierarchical lists, `NSOutlineView`.
+For non-hierarchical inset lists, use `NSTableView` with the system inset
+style. For hierarchical lists, use `NSOutlineView`.
 
 ```swift
-let layout = NSCollectionViewCompositionalLayout.list(
-    using: .init(appearance: .insetGrouped)
-)
+let tableView = NSTableView()
+tableView.style = .inset
 ```
 
 ## Geometry

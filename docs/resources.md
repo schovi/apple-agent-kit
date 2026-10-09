@@ -155,9 +155,9 @@ Sources: [WWDC25 session 310](https://developer.apple.com/videos/play/wwdc2025/3
 
 ## F. Sheets / presentations
 
-- Liquid Glass on sheets is **automatic** when `.presentationDetents` includes a partial-height detent. Avoid `.presentationBackground(.glass)`; it's redundant.
+- Liquid Glass on sheets is **automatic** when `.presentationDetents` includes a partial-height detent. Do not override it with `.presentationBackground(...)` (A12). Note: `.glass` is a button style, not a `ShapeStyle`, so `.presentationBackground(.glass)` does not compile.
   Source: [nilcoalescing](https://nilcoalescing.com/blog/PresentingLiquidGlassSheetsInSwiftUI/)
-- Sheet morph in from a control: `.matchedTransitionSource(id:in:)` + `.navigationTransition(.zoom(sourceID:in:))`.
+- Sheet morph in from a control: `.matchedTransitionSource(id:in:)` + `.navigationTransition(.zoom(sourceID:in:))`. **iOS / iPadOS only**: `zoom` is unavailable on macOS (verified against the macOS 27 SDK).
 
 ---
 
@@ -401,3 +401,21 @@ is committed scope; treat as a backlog for prioritization.
 ### O.5 Recommendation
 
 If only one direction: **O.4 #12 (accessibility-first framing)**. **O.4 #14** is the long-game bet if this becomes a serious project.
+
+---
+
+## P. October 2026 verification pass (macOS 27)
+
+Everything below was checked when the kit moved to v0.7.0. API claims were verified against the local macOS 27 SDK (Xcode 27, `MacOSX27.0.sdk`) and `tools/check-swift-snippets.py`.
+
+- [HIG Accessibility](https://developer.apple.com/design/human-interface-guidelines/accessibility): macOS default control size 28 × 28 pt, minimum 20 × 20 pt; iOS 44 × 44 pt. Spacing about 12 pt around bezeled and 24 pt around unbezeled controls.
+- [WCAG 2.2 SC 2.5.8 Target Size (Minimum)](https://www.w3.org/TR/WCAG22/#target-size-minimum): 24 × 24 CSS px, level AA. SC 2.5.5 (44 px) is AAA.
+- [HIG Materials](https://developer.apple.com/design/human-interface-guidelines/materials): clear glass over bright content, consider a 35% dark dimming layer.
+- [HIG What's new](https://developer.apple.com/design/whats-new/): June 2026 updates to sidebars, scroll edge effects ("prefer the automatic style", "one scroll edge effect per view"), app icons, menu item icons.
+- [HIG App icons](https://developer.apple.com/design/human-interface-guidelines/app-icons): appearances default, dark, clear, tinted; the system derives appearances you do not customize.
+- [Apple Support 122868](https://support.apple.com/en-us/122868): macOS 26.1 user setting for clear or tinted Liquid Glass. WWDC26 keynote: macOS 27 turns it into a slider; tighter uniform window corners; edge-to-edge sidebars.
+- [WWDC26 session 289](https://developer.apple.com/videos/play/wwdc2026/289/): AppKit automatic scroll edge style hardens under free-floating titles; interactive glass bounce.
+- macOS 27 SDK headers: `NSMenuItem.preferredImageVisibility` (images hidden by default from macOS 27), `NSGlassEffectView.effectIsInteractive`, `NSView.effectiveCornerRadii` / `viewDidChangeEffectiveCornerRadii()`, `NSScrollEdgeEffectStyle` + `preferredScrollEdgeEffectStyle` on accessory view controllers.
+- SwiftUI interface: `Document` / `ReadableDocument` / `WritableDocument`; `FileDocument` deprecated in favor of `Document`.
+- Xcode 27 bundles Apple agent skills (`Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Resources/*.idechatprompttemplate`): `swiftui-specialist`, `swiftui-whats-new-27`, `building-document-based-swiftui-applications`, `uikit-app-modernization`, `app-intents-specialist`, `app-intents-whats-new-27`, `adopt-c-bounds-safety`, `audit-xcode-security-settings`. None mention Liquid Glass, the menu bar, or HIG.
+- Icon Composer ships inside Xcode 27 (`Xcode.app/Contents/Applications/Icon Composer.app`).

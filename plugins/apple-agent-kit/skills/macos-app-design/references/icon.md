@@ -4,12 +4,12 @@ When the user asks for an icon, point them at **Icon Composer** and the squircle
 
 ## Tool
 
-Apple's [Icon Composer](https://developer.apple.com/icon-composer/) ships the `.icon` asset Xcode consumes for macOS 26 and iOS 26. It produces all sizes, all variants (light / dark / tinted), and the Liquid-Glass-aware treatment from one document.
+Apple's [Icon Composer](https://developer.apple.com/icon-composer/) produces the `.icon` document Xcode consumes for macOS 26+ and iOS 26+. Since Xcode 27 it ships inside Xcode (`Xcode.app/Contents/Applications/Icon Composer.app`) and previews both the 2026 and 2027 rendering of the icon. One document yields every size, every appearance, and the Liquid Glass treatment.
 
 ## Canvas and safe area
 
 - Canvas: **1024 × 1024**.
-- Safe area: **820 × 820** centered. Squircle clip eats the corners — content outside this square is at risk.
+- Keep the mark inside the central area of Apple's icon grid (about 820 × 820). The squircle clip eats the corners. Check the grid in Icon Composer rather than trusting a number.
 - Do not pre-clip with `cornerRadius`. The system applies the continuous-curvature squircle.
 
 ## Layered model
@@ -22,13 +22,14 @@ Apple's [Icon Composer](https://developer.apple.com/icon-composer/) ships the `.
 
 System applies the inner shadow and Liquid-Glass highlight. Do not paint your own shadow into the asset.
 
-## Variants
+## Appearances
 
-All three required in the `.icon` document:
+The system renders each icon in several appearances: **default**, **dark**, **clear** (light and dark), and **tinted** (light and dark). Design the default first. The system derives any appearance you do not customize; override one only when the derived version reads badly.
 
-- **Light** — color version on light desktop / home screen.
-- **Dark** — adapted for dark mode (don't ship inverted RGB).
-- **Tinted** — foreground only; system paints the background.
+- **Dark**: adapt colors for dark mode. Do not ship inverted RGB.
+- **Clear / tinted**: the system drives color. Make sure the mark still reads as a silhouette.
+
+Source: [HIG App icons](https://developer.apple.com/design/human-interface-guidelines/app-icons).
 
 ## Drop into Xcode
 

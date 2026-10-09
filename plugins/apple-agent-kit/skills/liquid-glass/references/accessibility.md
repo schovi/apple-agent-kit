@@ -39,4 +39,4 @@ For generic native focus and accessible-name rules, use `HIG — accessibility` 
 
 - `references/anti-patterns.md` — A9 (fighting system flags) and the full audit-ID list.
 - `references/metal-shaders.md` — shader-hero reduce-transparency fallback (the one place where auto-degradation does not apply).
-- `macos-app-design/references/accessibility.md` — generic WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.5 target size, 4.1.2 name) for any Mac app.
+- `macos-app-design/references/accessibility.md` — generic WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.8 target size, 4.1.2 name) for any Mac app.

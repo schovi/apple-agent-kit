@@ -1,17 +1,45 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 — native only, macOS 27, SDK-verified snippets
 
 ### Breaking
 
 - **Web side removed.** The repo is now native Apple only: the plugin plus the Swift showcase. Deleted `prompts/` (web frosted-glass prompt), `examples/macos-web/`, `audit/` (web auditor), `spec/` and `dist/` (token spec and exports), `scripts/serve.mjs`, `kit-figma/`, `package.json`, `.claude/skills/liquid-glass-sync/`, `docs/design-system.md`, `docs/apple-prompt-comparison.md`, `docs/web-prompt.md`, `docs/quickstart.md`, `CONTRIBUTING.md`, and stray screenshots. Recover any of it from git history (commit `e6384ea`, v0.6.0).
 - **Plugin is the source of truth.** Token values cited from `spec/tokens/material.yaml` are inlined in the skill references. Showcase `Tokens.generated.swift` is now hand-maintained `TokenValues.swift`.
+- **`ios-app-design` stub removed.** It never triggered and held no content. iOS stays on the roadmap; for iOS code use Apple's Xcode 27 skills.
 - **Web-only audit IDs retired.** A25 is gone. Native focus and accessible-name issues formerly tagged A26 / A27 are reported as `HIG — accessibility`. A1–A24, B1, F1–F5 are unchanged.
 
 ### Added
 
 - **`design-custom-macos-apps` skill** (`plugins/apple-agent-kit/skills/design-custom-macos-apps/`). Plans, implements, reviews, and costs distinctive custom Mac UI that keeps Mac behavior. Treats technology, behavior, and appearance as separate decisions. `SKILL.md` plus references: `customization-levels.md`, `visual-system.md`, `mac-behavior.md`, `glass-strategy.md`, `maintenance.md`, `review-checklist.md`, `scenarios.md`, `case-studies.md` (Things, Bear, Craft, Fantastical, Rogue Amoeba, DaisyDisk, CleanShot, NetNewsWire, with sources and evidence limits). Composes `macos-app-design` and `liquid-glass`. No new audit IDs, no token changes.
-- Skill listed in `AGENTS.md`, `README.md`, both plugin manifests, `.claude-plugin/marketplace.json`, and `package.json`.
+- Skill listed in `AGENTS.md`, `README.md`, both plugin manifests, and `.claude-plugin/marketplace.json`.
+- **`tools/check-swift-snippets.py`.** Typechecks every Swift block in the plugin against the installed macOS SDK (target macOS 26), stubbing names a snippet borrows from surrounding code. FAIL means API misuse. Baseline: 133 blocks, 0 fail on Xcode 27 / macOS 27 SDK.
+- **macOS 27 coverage.** "macOS 27 changes" sections in `liquid-glass/references/swiftui.md` and `appkit.md`: `NSGlassEffectView.effectIsInteractive`, `effectiveCornerRadii` / `viewDidChangeEffectiveCornerRadii()`, `GeometryProxy.concentricCornerRadii`, menu item image visibility, the user's clear-to-tinted glass setting.
+- `apple-app-reviewer` loads `design-custom-macos-apps` and reports custom-UI findings as `CUSTOM —`, with an evidence level.
+- `docs/resources.md` § P: October 2026 verification sources.
+
+### Fixed (API errors caught by the snippet checker)
+
+- `glassEffectUnion(id:in:)` → `glassEffectUnion(id:namespace:)`.
+- macOS-unavailable APIs removed from macOS recipes: `.navigationTransition(.zoom)`, `ToolbarItem(placement: .largeSubtitle)`, `.navigationBarLeading` / `.bottomBar` placements. `DefaultToolbarItem` kind `.sidebar` → `.sidebarToggle`.
+- Nonexistent APIs replaced: `.scrollExtensionMode(.underSidebar)`, `NSScrollView.topEdgeEffect` (now `preferredScrollEdgeEffectStyle` on accessory view controllers), `NSCollectionViewCompositionalLayout.list` (now `NSTableView` `.inset` style), `NSToolbarItem.Identifier.search`, a `KeyboardShortcut` used as a view.
+- Wrong signatures: `Slider(value:in:neutralValue:label:)` order, `frame(minWidth:minHeight:)` order, `NSItemBadge.indicator` is a property, `NSGlassEffectContainerView` children go in `contentView`.
+- Context-dependent snippets made self-contained (toolbar identifiers, sidebar sections, search delegate, `keyDown` override).
+
+### Changed (macOS 27 and current HIG)
+
+- **Click targets:** 44 × 44 pt was the iOS figure. macOS policy is now 28 × 28 pt default, 20 × 20 pt floor (HIG Accessibility), custom hit areas at least 24 × 24 pt (WCAG 2.2 SC 2.5.8 AA; 2.5.5 was AAA). A4, `macos-app-design` accessibility, and the reviewer agree.
+- **Window radius and sidebar:** no recipe hard-codes the window corner radius (macOS 27 tightened it). Sidebars are edge to edge on macOS 27; the 8 pt floating inset is a macOS 26 observation drawn by the system.
+- **Scroll edge:** `.automatic` is the default (was documented as `.soft`). A21 follows the HIG: one style per scroll view, prefer automatic.
+- **A8:** Clear-glass dimming layer 0.24 → 35% (HIG Materials). The skill no longer switches Clear to Regular silently; it says what it chose.
+- **A12** rewritten: `.presentationBackground(.glass)` does not compile; the rule is now "do not override a partial-detent sheet's system glass".
+- **A23** narrowed to two actions merged into one hit target; plain icon + label buttons are fine.
+- **F3** narrowed to forms and data entry; a single search or command field in floating glass is allowed.
+- **B1** counts classic backdrop materials too, and its numbers are labelled kit defaults that call for a profile, not Apple limits.
+- **Glass on older macOS:** gate with `#available(macOS 26, *)` plus a non-glass fallback instead of refusing.
+- Shader recipes apply `.layerEffect` last (`metal-shaders.md`, showcase `ShaderHeroSection.swift`).
+- `macos-app-design`: Document protocol on macOS 27 (`FileDocument` deprecated), menu item images hidden by default on macOS 27, icon appearances per current HIG, Icon Composer bundled with Xcode 27, composition with Apple's Xcode 27 skills.
+- Plugin, marketplace: version 0.7.0.
 
 ## 0.6.0 — rebrand + skill split (apple-agent-kit)
 

@@ -34,11 +34,15 @@ struct ContentView: View {
                         .transition(.scale(scale: 0.96).combined(with: .opacity))
                 }
             }
-            .background(KeyboardShortcut(keyEquivalent: "k", modifiers: .command) {
+            .overlay {
+                Button("Toggle Palette") {
                 withAnimation(.spring(response: 0.24, dampingFraction: 0.85)) {
                     isPaletteOpen.toggle()
                 }
-            })
+                }
+                .keyboardShortcut("k", modifiers: .command)
+                .hidden()
+            }
     }
 }
 

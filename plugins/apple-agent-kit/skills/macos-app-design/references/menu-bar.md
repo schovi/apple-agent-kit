@@ -21,7 +21,7 @@ The Apple menu sits on the leading side (system-owned, never modify). Menu bar e
 
 - **Support the default system-defined menus and ordering.** People expect menus and items in a familiar order. In many cases the system implements the standard items so you don't have to — Edit > Copy works out of the box for standard `TextField` / `NSTextView`.
 - **Always show the same set of menu items.** Visibility teaches what the app supports. If an item isn't actionable in the current state, **disable** it — don't hide it.
-- **Represent menu items with familiar icons.** Use the system icons for Copy, Share, Delete, etc.
+- **Use menu item images sparingly.** From macOS 27, AppKit hides most menu item images by default and decides visibility from system configuration. Add an image only where it carries meaning (a color, a document type). Force it with `NSMenuItem.preferredImageVisibility = .visible` (macOS 27+) or SwiftUI `.labelStyle(.titleAndIcon)`. Use system SF Symbols for standard items.
 - **Support the standard keyboard shortcuts** for the standard items. Define custom shortcuts only when necessary. See `keyboard-shortcuts.md`.
 - **Prefer short, one-word menu titles.** If you need more than one word, use title-style capitalization.
 

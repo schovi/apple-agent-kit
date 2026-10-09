@@ -1,7 +1,7 @@
 # Scroll edge effects
 
 How scrolling content fades / hardens beneath floating chrome
-(toolbar, sidebar, inspector). New on macOS 26.
+(toolbar, sidebar, inspector). Available on macOS 26 and later.
 
 Use the system treatment.
 
@@ -12,34 +12,33 @@ ScrollView { ... }
     .scrollEdgeEffectStyle(.hard, for: .top)
 ```
 
-- Styles: `.soft` (default), `.hard`.
+- Styles: `.automatic` (default), `.soft`, `.hard`.
 - Edges: `.top`, `.bottom`, `.leading`, `.trailing`, `.all`.
 
 Common cases:
 
 - **Default scroll content under a unified toolbar** — no manual call;
-  `.soft` is the default and works.
+  `.automatic` is the default and preferred.
 - **Pinned-header `List` under a toolbar** — `.hard` for the top edge.
 - **TextEditor inside an inspector pane** — `.hard` for the top edge.
 
 ## AppKit
 
 ```swift
-scrollView.topEdgeEffect.style    = .hard
-scrollView.bottomEdgeEffect.style = .soft
-scrollView.leftEdgeEffect.isHidden = true
+if #available(macOS 26.1, *) {
+    titlebarAccessory.preferredScrollEdgeEffectStyle = .automatic
+}
 ```
 
-Per-edge accessors on `NSScrollView`. Each carries:
-
-- `.style` — `.soft` (default) or `.hard`.
-- `.isHidden` — drop the effect on edges where no chrome sits.
+Set `preferredScrollEdgeEffectStyle` on an `NSTitlebarAccessoryViewController`
+or `NSSplitViewItemAccessoryViewController`. `.automatic` is the default.
+On macOS 27, it resolves to `.hard` when free-floating title text overlaps content.
 
 ## Rules
 
-- **One style per edge.** Never stack two on the same edge.
-- **Never mix soft + hard on adjacent edges of one scroll view.** The
-  visual language reads as one boundary character — pick one.
+- **One effect per view.** Prefer `.automatic`.
+- **Never mix explicit soft + hard styles on one view.** The visual language
+  reads as one boundary character.
 - **Only where it does work.** Edge effects are not decoration. Apply
   one only where a floating chrome element actually overlaps that edge.
 
@@ -55,7 +54,7 @@ Per-edge accessors on `NSScrollView`. Each carries:
 
 ## Caveats
 
-- Reduced Transparency collapses `.soft` to a thin solid line and
+- Reduced Transparency collapses `.automatic` or `.soft` to a thin solid line and
   `.hard` to a divider. Do not branch on
   `accessibilityReduceTransparency` to draw your own — the system
   already inserts one.

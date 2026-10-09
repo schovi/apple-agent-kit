@@ -10,8 +10,8 @@
         "path": "plugins/apple-agent-kit",
         "ref": "main"
       },
-      "description": "Build authentic Apple apps for agents. macos-app-design (HIG, menu bar, multi-window, shortcuts, system primitives, icon, accessibility) + liquid-glass (macOS 26 glass material, anti-patterns, performance budget, shaders) + design-custom-macos-apps (custom UI that keeps Mac behavior).",
-      "version": "0.6.0",
+      "description": "Build authentic Apple apps for agents. macos-app-design (HIG, menu bar, multi-window, shortcuts, system primitives, icon, accessibility) + liquid-glass (macOS 26+ glass material, anti-patterns, performance budget, shaders) + design-custom-macos-apps (custom UI that keeps Mac behavior).",
+      "version": "0.7.0",
       "license": "MIT",
       "category": "Design",
       "tags": ["apple", "macos", "tahoe", "hig", "swiftui", "appkit", "liquid-glass", "design-system", "mac-craft", "accessibility"]

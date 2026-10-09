@@ -55,16 +55,32 @@ AppKit uses `acceptsFirstResponder`, `becomeFirstResponder()`, and `drawFocusRin
 
 **Review finding `HIG — accessibility`:** custom hit area with no focus reflection.
 
-### Touch / click targets (WCAG 2.5.5 — target size)
+### Click targets (WCAG 2.5.8 — target size, minimum)
 
-44×44 pt minimum hit area for any interactive element. If the visual size is smaller (e.g. a 22pt icon), pad to reach 44.
+macOS sizes are not iOS sizes. Use this policy:
+
+| Target | Size | Source |
+|---|---|---|
+| Default control | 28 × 28 pt | HIG Accessibility (macOS) |
+| Absolute floor | 20 × 20 pt | HIG Accessibility (macOS) |
+| Custom hit area (icon-only, custom drawn) | at least 24 × 24 pt, prefer 28 × 28 | WCAG 2.2 SC 2.5.8 (AA) |
+| Touch (iOS, iPadOS) | 44 × 44 pt | HIG Accessibility (iOS) |
+
+- System controls at `.regular` control size already meet the policy. Do not pad them.
+- Pad only custom hit areas: draw the glyph at its visual size and extend the hit area with `.frame` plus `.contentShape`.
+- Keep about 12 pt between bezeled controls and about 24 pt around unbezeled ones (HIG Accessibility) so targets do not crowd.
 
 ```swift
 Button { } label: {
     Image(systemName: "ellipsis")
-        .frame(width: 44, height: 44)        // hit area
+        .frame(width: 28, height: 28)        // hit area, not glyph size
+        .contentShape(Rectangle())
 }
+.buttonStyle(.plain)
+.accessibilityLabel("More")
 ```
+
+Sources: [HIG Accessibility](https://developer.apple.com/design/human-interface-guidelines/accessibility), [WCAG 2.2 SC 2.5.8](https://www.w3.org/TR/WCAG22/#target-size-minimum).
 
 ### Color is never the only signal (WCAG 1.4.1 — use of color)
 
