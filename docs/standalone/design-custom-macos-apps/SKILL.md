@@ -1,6 +1,9 @@
-# Design custom macOS apps (single-file edition)
+---
+name: design-custom-macos-apps
+description: Plan, implement, or review a Mac app with a distinctive custom look that still behaves like a Mac app. Use when the user wants a branded or bespoke macOS UI, custom-styled controls, a custom canvas or editor, a design refresh, a decision on how much Liquid Glass to adopt in a custom design, a review of an existing custom Mac interface, or an estimate of the compatibility and maintenance cost of custom versus standard UI. Also trigger on "make it look unique but native", "custom ButtonStyle", "our own design system on macOS", or "does this custom UI break Mac conventions". Self-contained single-file edition; includes the HIG and Liquid Glass rules it needs.
+---
 
-Use when: planning, building, reviewing, or costing a Mac app with a distinctive custom look that must still behave like a Mac app. Triggers: branded or bespoke macOS UI, custom-styled controls, custom canvas or editor, design refresh, "how much Liquid Glass", "unique but native", custom `ButtonStyle`, "our own design system on macOS", "does this custom UI break Mac conventions".
+# Design custom macOS apps (single-file edition)
 
 Goal: a Mac app with its own identity that stays intuitive, accessible, reliable, and maintainable. Respect the project's existing stack. Never mandate a SwiftUI or AppKit rewrite. Never port an iOS layout to the Mac unchanged.
 

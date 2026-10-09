@@ -4,7 +4,7 @@
 
 ### Added
 
-- **`docs/standalone/design-custom-macos-apps.md`.** Single-file version of the `design-custom-macos-apps` skill for tools without skill support. Inlines all references and the sibling-skill rules it points to. Hand-maintained copy: the skill stays the source of truth.
+- **`docs/standalone/design-custom-macos-apps/SKILL.md`.** Single-file version of the `design-custom-macos-apps` skill for tools without plugin support; loads as a standalone skill or pastes as a prompt. Inlines all references and the sibling-skill rules it points to. Hand-maintained copy: the skill stays the source of truth.
 
 ## 0.7.0 — native only, macOS 27, SDK-verified snippets
 
