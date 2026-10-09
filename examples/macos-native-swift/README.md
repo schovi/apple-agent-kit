@@ -1,13 +1,12 @@
 # Liquid Glass — native SwiftUI showcase
 
-Mirror of `examples/macos-web/` (HTML) but built with the real
-macOS 26 Liquid Glass SwiftUI APIs. Use this to see what the web profile
-is approximating.
+A native showcase built with the real macOS 26 Liquid Glass SwiftUI APIs.
 
 ## Requirements
 
-- macOS 26 (Tahoe) — Liquid Glass APIs only exist at runtime on 26+.
-- Xcode 26 toolchain (Swift 6.0+).
+- macOS 26 or later.
+- Xcode 26 or later.
+- Install the Metal Toolchain once: `xcodebuild -downloadComponent MetalToolchain`.
 
 ## Run
 
@@ -15,12 +14,6 @@ is approximating.
 cd examples/macos-native-swift
 ./scripts/run.sh             # debug build, launches the app
 ./scripts/run.sh release     # optimized build
-```
-
-Or use the equivalents directly:
-
-```bash
-swift run LiquidGlassShowcase
 ```
 
 Open in Xcode:
@@ -56,13 +49,8 @@ Other scripts:
 
 ## Why a separate example
 
-The HTML showcase approximates Liquid Glass with `backdrop-filter` + `saturate` + a
-highlight gradient. That's deliberate — the kit's whole point is making the
-material reachable on the web where Apple's native renderer doesn't run.
-
-This Swift example uses the *actual* Apple APIs, on the *actual* platform
-they target. Same anatomy, same component vocabulary. Use it for honest
-visual comparison and as a port-from-spec reference for native macOS work.
+This Swift example uses the actual Apple APIs on the platform they target.
+Use it as a native macOS reference.
 
 ## Source map
 
@@ -78,7 +66,8 @@ Sources/LiquidGlassShowcase/
 ├── ContentView.swift     — NavigationSplitView, selection state, toolbar
 ├── Sidebar.swift         — source-list sidebar
 ├── Inspector.swift       — metadata inspector pane
-├── Tokens.swift          — radius / spacing / motion constants from spec
+├── Tokens.swift          — token namespace and SwiftUI helpers
+├── TokenValues.swift     — hand-maintained token values
 └── Sections.swift        — every showcase section in one file
 ```
 
@@ -90,7 +79,7 @@ Sources/LiquidGlassShowcase/
   - [`GlassProminentButtonStyle`](https://developer.apple.com/documentation/swiftui/glassprominentbuttonstyle)
   - [`ConcentricRectangle`](https://developer.apple.com/documentation/swiftui/concentricrectangle)
   - [`sharedBackgroundVisibility(_:)`](https://developer.apple.com/documentation/swiftui/customizabletoolbarcontent/sharedbackgroundvisibility(_:))
-- Full provenance: `docs/resources.md`.
+- Maintainer provenance: the apple-agent-kit repository's `docs/resources.md`.
 
 ## Not Apple-endorsed
 

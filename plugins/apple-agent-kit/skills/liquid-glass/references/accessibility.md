@@ -19,13 +19,13 @@ Do **not** override these by branching on the flag and re-applying a custom blur
 
 ## Audit-ID mapping — glass-specific scope
 
-The web auditor IDs A2 / A8 / A9 all have native analogues but the native auditor agent enforces them through code review, not static scanning. When you spot a violation, cite the matching ID:
+The reviewer enforces these glass-specific rules through code review. When you spot a violation, cite the matching ID:
 
 - **A2** — glass behind body content. Native: `.glassEffect` on a scroll container holding `Text` / `Table`.
 - **A8** — Clear glass without a dim layer.
 - **A9** — fighting `accessibilityReduceTransparency` / `accessibilityReduceMotion`. Includes shader heroes that lack a reduce-transparency fallback branch.
 
-A26 and A27 (generic native focus + accessible-name rules) are documented in `macos-app-design/references/accessibility.md` — they apply to any Mac app, not just glass surfaces. A25 (renderer tier) is web-only and never raised on native code.
+For generic native focus and accessible-name rules, use `HIG — accessibility` findings and `macos-app-design/references/accessibility.md`.
 
 ## Sources
 
@@ -37,7 +37,6 @@ A26 and A27 (generic native focus + accessible-name rules) are documented in `ma
 
 ## See also
 
-- `spec/rules/accessibility-rules.md` — the canonical cross-cutting rule.
 - `references/anti-patterns.md` — A9 (fighting system flags) and the full audit-ID list.
 - `references/metal-shaders.md` — shader-hero reduce-transparency fallback (the one place where auto-degradation does not apply).
 - `macos-app-design/references/accessibility.md` — generic WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.5 target size, 4.1.2 name) for any Mac app.

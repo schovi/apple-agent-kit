@@ -3,10 +3,7 @@
 How scrolling content fades / hardens beneath floating chrome
 (toolbar, sidebar, inspector). New on macOS 26.
 
-Native-only. Web has no equivalent — CSS `mask-image` gradients do not
-match the system treatment and are not part of the kit.
-
-Spec: `spec/patterns/scroll-edge-effects.md`.
+Use the system treatment.
 
 ## SwiftUI
 

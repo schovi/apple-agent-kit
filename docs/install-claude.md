@@ -1,6 +1,6 @@
 # Install for Claude Code
 
-This installs the **native macOS 26** plugin. For web Liquid Glass UI in Claude Code (or any other tool), use `prompts/web-frosted-glass.md` instead. See `docs/web-prompt.md`.
+This installs the **native Apple** plugin.
 
 ## Marketplace install (recommended)
 
@@ -28,7 +28,7 @@ claude --plugin-dir ./plugins/apple-agent-kit
 Then:
 
 ```
-/liquid-glass-native:liquid-glass Build a SwiftUI app with NavigationSplitView, a glass toolbar, and an inspector.
+/apple-agent-kit:liquid-glass Build a SwiftUI app with NavigationSplitView, a glass toolbar, and an inspector.
 ```
 
 ## How this plugin is laid out
@@ -45,7 +45,7 @@ Both reference the canonical `liquid-glass` skill.
 ## Update
 
 ```
-/plugin marketplace update liquid-glass-agent-kit
+/plugin marketplace update apple-agent-kit
 /plugin install apple-agent-kit@apple-agent-kit
 ```
 

@@ -77,7 +77,7 @@ label.layer?.cornerRadius = 10
 label.layer?.cornerCurve = .continuous
 ```
 
-## Geometry (spec/components/badge.yaml)
+## Geometry
 
 - min-height 20, min-width 20
 - padding 8 / 2

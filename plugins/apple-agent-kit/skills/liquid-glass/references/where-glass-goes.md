@@ -1,8 +1,8 @@
 # Where glass goes (and where it doesn't)
 
 The single most common Liquid Glass mistake is putting glass behind
-content. The rules below mirror Apple's HIG (sourced from WWDC25 session
-219) and the kit's own `spec/rules/layout-rules.md`.
+content. The rules below follow Apple's HIG (sourced from WWDC25 session
+219).
 
 ## Layer model
 

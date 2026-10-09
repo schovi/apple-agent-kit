@@ -2,17 +2,15 @@ import SwiftUI
 
 // Tokens namespace declaration + showcase-only helpers.
 //
-// Numeric values (Radius, Spacing, Duration, Weight, TypeScale, Glass,
-// Budget, Tier) are generated from spec/tokens/*.yaml into
-// Tokens.generated.swift — do not hand-edit those there. Regenerate
-// with `npm run build:tokens`. Easing helpers below stay hand-written
-// because they wrap SwiftUI Animation factories (logic, not values).
+// Numeric values live in TokenValues.swift and mirror the native token
+// reference. Easing helpers below stay hand-written because they wrap
+// SwiftUI Animation factories (logic, not values).
 
 enum Tokens { }
 
 extension Tokens {
     enum Easing {
-        // Curves come from spec/tokens/motion.yaml. Each helper returns a ready
+        // Curves come from the native token reference. Each helper returns a ready
         // SwiftUI Animation so call sites can write `.animation(Tokens.Easing.standard(duration: ...))`
         // instead of redeclaring control points.
         static func standard(duration: Double) -> Animation {
@@ -38,8 +36,8 @@ func concentricRadius(parent: CGFloat, inset: CGFloat) -> CGFloat {
 }
 
 // Material roles — where the surface lives, not how it looks.
-// Mirrors `spec/tokens/material.yaml` `roles.*`. Each role names the closest
-// real Apple API for SwiftUI and AppKit. `liveBlur` decides whether the
+// Each role names the closest real Apple API for SwiftUI and AppKit.
+// `liveBlur` decides whether the
 // surface counts against the B1 performance budget.
 enum MaterialRole: String, CaseIterable, Identifiable {
     case sidebar, toolbar, menu, popover, hud, sheet, header

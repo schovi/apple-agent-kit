@@ -145,4 +145,4 @@ scene, not by sharing modifier state.
 
 ## Sources
 
-See `spec/patterns/multi-window.md` for citations.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

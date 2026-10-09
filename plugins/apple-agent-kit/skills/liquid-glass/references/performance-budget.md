@@ -1,7 +1,6 @@
 # Performance budget (native)
 
-Mirrors `spec/rules/performance-budget.md`. Liquid Glass is expensive
-to render and expensive to think about. Cap the number of
+Liquid Glass is expensive to render. Cap the number of
 live-blurred surfaces an agent composes into one pane.
 
 ## Definition
@@ -46,9 +45,8 @@ own cost class and their own cap:
   Branch on the environment value and provide a fallback yourself.
 
 The `liquid-glass-shader-implementer` subagent enforces this
-when it produces shader code. The auditor flags shader-driven heroes
-that exceed one-per-pane even though B1's `lg-glass` counter doesn't
-see them directly.
+when it produces shader code. The reviewer flags shader-driven heroes
+that exceed one-per-pane even though B1 does not count shaders directly.
 
 ## Patterns that stay under
 
@@ -65,9 +63,9 @@ see them directly.
 
 `apple-app-reviewer` rejects a screen when:
 
-- a single visible pane carries more than `budget.max` (6) live-blurred
+- a single visible pane carries more than the hard ceiling (6) live-blurred
   surfaces, **or**
-- the screen rests above `budget.recommended` (3) with no transient
+- the screen rests above the recommended cap (3) with no transient
   reason (no open popover / HUD / sheet).
 
 Recommendation is a soft rule for `liquid-glass-implementer`:

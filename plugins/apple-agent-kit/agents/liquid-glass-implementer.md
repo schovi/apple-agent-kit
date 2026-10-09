@@ -16,7 +16,7 @@ hand-roll a `CIFilter` to imitate glass.
 
 - A surface to build: window, toolbar, sidebar, popover, sheet, button group, segmented control, source-list row.
 - The target framework: SwiftUI (default) or AppKit.
-- Any platform constraint (e.g. "must also build on macOS 15"). If the target is < macOS 26, refuse and offer the web frosted-glass prompt at `prompts/web-frosted-glass.md`.
+- Any platform constraint (e.g. "must also build on macOS 15"). If the target is < macOS 26, refuse. Do not fake Liquid Glass.
 
 ## What you do
 
@@ -25,7 +25,7 @@ hand-roll a `CIFilter` to imitate glass.
 3. Apply Liquid Glass with the *system* API: `.glassEffect(...)`, `GlassEffectContainer`, `.buttonStyle(.glass)` / `.glassProminent` (SwiftUI), or `NSGlassEffectView` / `NSGlassEffectContainerView` (AppKit).
 4. Honor concentricity: declare `.containerShape(...)` on the parent and use `ConcentricRectangle()` on children (SwiftUI), or pick matching radii manually (AppKit).
 5. Pick tokens from `references/tokens.md`. Do not improvise sizes, radii, or motion timings.
-6. Self-check against `references/anti-patterns.md` (A1–A24; A25–A27 are web-only and do not apply to native code), `references/performance-budget.md` (B1 — cap on live-blurred surfaces per pane), `references/when-not-to-use-glass.md` (F1–F5 forbidden surfaces), and `references/accessibility.md` (glass auto-degradation). For generic WCAG (labels on icon-only buttons, focus, target size) cross-reference `macos-app-design/references/accessibility.md`.
+6. Self-check against `references/anti-patterns.md` (A1–A24), `references/performance-budget.md` (B1 — cap on live-blurred surfaces per pane), `references/when-not-to-use-glass.md` (F1–F5 forbidden surfaces), and `references/accessibility.md` (glass auto-degradation). For generic WCAG (labels on icon-only buttons, focus, target size) cross-reference `macos-app-design/references/accessibility.md`.
 
 ## What you never do
 

@@ -1,7 +1,6 @@
 # When not to use glass (native)
 
-Mirrors `spec/rules/when-not-to-use-glass.md`. Glass is a
-navigation-layer material. Putting it behind content makes content
+Glass is a navigation-layer material. Putting it behind content makes content
 harder to read, and on macOS 26 / iOS 26 it can outright fail to
 render.
 
@@ -43,8 +42,7 @@ glass-on-glass (F5).
 - failure: `.glassEffect` behind a `TextField` / `SecureField` /
   `NSTextField`.
 - fix: inputs stay solid. If the panel around them is glass, the
-  input is a solid pill on the panel. `spec/components/text-field.yaml`
-  enforces `glass: forbidden`.
+  input is a solid pill on the panel.
 
 ## F4 — Dense data tables
 
@@ -83,7 +81,7 @@ by some developers as a forced upgrade. The kit's position: ship
 Liquid Glass on the floating layer where it works, and follow the
 rules above on the content layer where it doesn't.
 
-Citations and full source URLs live in
+Citations and full source URLs live in the apple-agent-kit repository's
 `docs/resources.md` section N.7. Highlights:
 
 - NN/g — Liquid Glass Is Cracked

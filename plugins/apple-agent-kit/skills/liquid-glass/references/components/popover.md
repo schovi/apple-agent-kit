@@ -34,7 +34,7 @@ popover.show(relativeTo: sender.bounds, of: sender, preferredEdge: .maxY)
 `behavior = .transient` dismisses on outside click; `.semitransient`
 keeps it open when the user clicks back into the app.
 
-## Geometry (spec/components/popover.yaml)
+## Geometry
 
 - min-width 220, max-width 360
 - radius 16 (`md`)

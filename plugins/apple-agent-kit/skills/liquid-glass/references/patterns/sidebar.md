@@ -107,4 +107,4 @@ System-handled. When `accessibilityReduceTransparency` is on, the sidebar collap
 
 ## Sources
 
-See `spec/patterns/sidebar.md` for citations.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

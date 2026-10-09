@@ -34,7 +34,7 @@ HStack {
 .accessibilityAddTraits(.isButton)
 ```
 
-**This is audit ID A27** (native scope): icon-only `Button` / `NSButton` without `accessibilityLabel` / `setAccessibilityLabel`.
+**Review finding `HIG — accessibility`:** icon-only `Button` / `NSButton` without `accessibilityLabel` / `setAccessibilityLabel`.
 
 ### Focus visibility (WCAG 2.4.7 — focus visible)
 
@@ -53,7 +53,7 @@ Button("Run") { }
 
 AppKit uses `acceptsFirstResponder`, `becomeFirstResponder()`, and `drawFocusRingMask()` on `NSView` subclasses. Do not disable the focus ring on a custom control without replacing it.
 
-**This is audit ID A26** (native scope): custom hit area with no focus reflection.
+**Review finding `HIG — accessibility`:** custom hit area with no focus reflection.
 
 ### Touch / click targets (WCAG 2.5.5 — target size)
 

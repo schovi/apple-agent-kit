@@ -19,5 +19,4 @@ swift run
 
 Or open `Package.swift` in Xcode.
 
-It mirrors `examples/macos-web/` (the HTML / CSS approximation)
-section by section so you can compare native vs. web side-by-side.
+It demonstrates native Liquid Glass patterns section by section.

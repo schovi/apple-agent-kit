@@ -48,4 +48,4 @@ For iOS, the same `.icon` drives the home-screen variants and the App Store list
 
 ## Sources
 
-Mirror of `spec/rules/icon.md`. See that file plus `docs/resources.md` section O.2 for full citations.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

@@ -61,7 +61,7 @@ item.preferredControlPosition = .leading
 toolbar.insertItem(withItemIdentifier: .search, at: 0)
 ```
 
-## Geometry (spec/components/search-field.yaml)
+## Geometry
 
 - toolbar variant: min-height 32, padding 12/6, capsule, icon 14
 - inline variant: min-height 44, padding 12/10, radius 12 (`sm`)

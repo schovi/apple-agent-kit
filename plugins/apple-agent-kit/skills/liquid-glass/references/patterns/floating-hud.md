@@ -65,7 +65,7 @@ NSLayoutConstraint.activate([
 ])
 ```
 
-## Geometry (spec/patterns/floating-hud.md)
+## Geometry
 
 - container radius: capsule (single row) / 16 (multi-row)
 - container padding: 6

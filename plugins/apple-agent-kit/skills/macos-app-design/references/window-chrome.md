@@ -78,4 +78,4 @@ Smaller-weight string after the title. For a custom subtitle view, use `ToolbarI
 
 ## Sources
 
-See `spec/patterns/window-chrome.md` for citations.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

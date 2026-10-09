@@ -1,6 +1,6 @@
 # Behavioral principles — what makes a Mac app feel like a Mac app
 
-These principles are framework-agnostic. They apply equally to SwiftUI, AppKit, an Electron app striving for native feel, or a web mockup simulating macOS chrome. Internalize them before writing any view code.
+These principles are framework-agnostic. They apply equally to SwiftUI, AppKit, or an Electron app striving for native feel. Internalize them before writing any view code.
 
 Distilled from working Mac apps (Linear, Raycast, Things, Arc, Fantastical, Bear, Tot) and Apple HIG.
 
@@ -48,7 +48,7 @@ Drag content **in** AND **out**. Both. Test:
 - Can I drag content **out** of the app to Finder, Mail, Notes, another app?
 - Does the drag preview look right at the cursor?
 
-This is the single biggest "feels like Mac" signal. Web apps fail it. Don't.
+This is the single biggest "feels like Mac" signal. Don't compromise it.
 
 ### Keyboard parity
 

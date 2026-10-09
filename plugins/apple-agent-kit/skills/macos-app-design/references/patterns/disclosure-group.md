@@ -57,7 +57,7 @@ outline.autoresizesOutlineColumn = true
 
 Implement `NSOutlineViewDataSource` and `NSOutlineViewDelegate`.
 
-## Geometry (spec/patterns/disclosure-group.md)
+## Geometry
 
 - header min-height 32
 - header padding 8 / 6

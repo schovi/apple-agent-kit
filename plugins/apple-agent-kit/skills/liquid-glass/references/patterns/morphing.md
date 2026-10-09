@@ -1,10 +1,7 @@
 # Morphing
 
 When a glass element appears, disappears, swaps shape, or moves between
-two spots, it should *morph*. Native-only — the web profile has no
-equivalent.
-
-Spec: `spec/patterns/morphing.md`.
+two spots, it should *morph*.
 
 ## SwiftUI
 

@@ -55,7 +55,7 @@ let pull = NSPopUpButton(frame: .zero, pullsDown: true)
 pull.menu = menu
 ```
 
-## Geometry (spec/components/menu.yaml)
+## Geometry
 
 - min-width 200, max-width 320
 - radius 12 (`sm`)

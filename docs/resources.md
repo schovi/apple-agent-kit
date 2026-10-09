@@ -6,7 +6,7 @@ WWDC25 sessions, Apple Newsroom, Apple developer docs, Apple Support, the HIG
 that quote them. Cite from here when adding new tokens, components, or rules.
 
 This file is the source of truth for "where did that come from?" The plugin
-references it; the HTML showcase references it; the native Swift example
+references it; the native Swift example
 references it.
 
 ---
@@ -110,8 +110,7 @@ references it.
 
 ### Numeric values
 Apple publishes **no** numeric blur / saturation / opacity values for Liquid Glass — it's
-real-time rendered and adaptive. The web profile in `spec/tokens/material.yaml`
-is a community-derived approximation, not a port of internal Apple values.
+real-time rendered and adaptive. This kit does not port internal Apple values.
 Source: [Apple Newsroom](https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/) (no numeric specs published).
 
 ---
@@ -172,7 +171,7 @@ Sources: [WWDC25 session 310](https://developer.apple.com/videos/play/wwdc2025/3
 
 ## H. Where glass goes (and where it does not)
 
-Layer rules from the HIG (per session 219 quotes) and `spec/rules/layout-rules.md`:
+Layer rules from the HIG (per session 219 quotes):
 
 **Glass-allowed**
 - Top navigation, bottom navigation, tab bar.
@@ -193,7 +192,6 @@ Layer rules from the HIG (per session 219 quotes) and `spec/rules/layout-rules.m
 ## I. Accessibility
 
 - Native: `NSAccessibility` flags `reduceTransparency`, `increaseContrast`, `reduceMotion`. AppKit auto-degrades vibrancy when these are on.
-- Web: emit `@media (prefers-reduced-transparency: reduce)`, `@media (prefers-contrast: more)`, `@media (prefers-reduced-motion: reduce)`. See `spec/rules/accessibility-rules.md`.
 
 ---
 
@@ -263,8 +261,8 @@ guess at API names if you need them, look them up first.
 ## M. House rules
 
 - Never claim "Apple-official" or "Apple-certified". The kit is inspired-by, not endorsed.
-- Never invent numeric tokens. New blur / opacity / radius / spacing values go into `spec/tokens/*.yaml` first, then into rendered code.
-- Apple ships no portable numeric values for Liquid Glass — the web tokens are a deliberate approximation, documented as such in `spec/tokens/material.yaml`.
+- Never invent numeric material values. Use native system APIs for Liquid Glass.
+- Apple ships no portable numeric blur, saturation, or opacity values for Liquid Glass.
 
 ---
 
@@ -280,37 +278,6 @@ Everything below was new at sweep time and is not duplicated above.
 - [muhittincamdali/LiquidGlassKit](https://github.com/muhittincamdali/LiquidGlassKit) — Pre-built `LiquidGlassCard / LiquidGlassButton / LiquidGlassNavigationBar` wrappers.
 - [mertozseven/LiquidGlassSwiftUI](https://github.com/mertozseven/LiquidGlassSwiftUI) — Minimal sample exercising `GlassEffectContainer`, shared style, and symbol transitions.
 - [dambertmunoz/dm-swift-swiftui-liquid-glass](https://github.com/dambertmunoz/dm-swift-swiftui-liquid-glass) — Practical adoption examples.
-- [artemnovichkov/xcode-26-system-prompts](https://github.com/artemnovichkov/xcode-26-system-prompts) — Reverse-engineered Xcode 26 LLM system prompts including detailed Liquid Glass guidance for SwiftUI, AppKit, and WidgetKit. Primary-source-adjacent. Diffed against our kit in `docs/apple-prompt-comparison.md`.
-
-### N.2 Cross-platform native (React Native, Compose, Flutter)
-
-- [callstack/liquid-glass](https://github.com/callstack/liquid-glass) + [Callstack blog: How To Use Liquid Glass in React Native](https://www.callstack.com/blog/how-to-use-liquid-glass-in-react-native) — `LiquidGlassView` wrapping `UIGlassEffect`; RN 0.80+.
-- [Expo GlassEffect SDK](https://docs.expo.dev/versions/latest/sdk/glass-effect/) + [Expo blog: Liquid Glass with Expo UI + SwiftUI](https://expo.dev/blog/liquid-glass-app-with-expo-ui-and-swiftui) — Official Expo wrapper plus SwiftUI-in-Expo hybrid pattern.
-- [ahmedawaad1804/rn-liquid-glass-view](https://github.com/ahmedawaad1804/rn-liquid-glass-view) — Plug-and-play `UIGlassEffect` wrapper.
-- [uginy/react-native-liquid-glass](https://github.com/uginy/react-native-liquid-glass) — AGSL GPU shaders on Android (API 33+), `UIVisualEffectView` on iOS.
-- [chrisbanes/haze](https://github.com/chrisbanes/haze) + [Haze 1.0 announcement](https://chrisbanes.me/posts/haze-1.0/) — De-facto Compose Multiplatform glass primitive. Built on `GraphicsLayer`; supports progressive blur.
-- [skydoves/Cloudy](https://github.com/skydoves/Cloudy) — KMP blur + glass with SDF crisp edges, normal-based refraction, chromatic dispersion, and explicit CPU fallback.
-- [NadeemIqbal/liquid-glass](https://github.com/NadeemIqbal/liquid-glass) — Compose Multiplatform `Modifier.liquidGlass()` with auto-tiered fallback. Strong reference for graceful degradation.
-- [desugar-64/imla](https://github.com/desugar-64/imla) — OpenGL real-time blur on Android API 23+.
-- [Sina Samaki — Glassmorphic bottom navigation in Compose](https://www.sinasamaki.com/glassmorphic-bottom-navigation-in-jetpack-compose/) — Hands-on `hazeState` / `hazeChild` wiring.
-
-### N.3 Web / CSS / SVG recreations
-
-- [AndrewPrifer/liquid-dom](https://github.com/AndrewPrifer/liquid-dom) + [announcement thread](https://x.com/AndrewPrifer/status/2056923983581446529) — **High-potential exploration target.** WebGPU monorepo claiming a "complete and faithful" Liquid Glass on the web: shape morphing, all properties animatable, dynamic refraction and reflection, adaptive tint, adaptive specular highlight, chromatic dispersion, and arbitrary HTML inside the glass. Ships React, Three.js, and React Three Fiber bindings plus a renderer-agnostic layout engine. Goes beyond the T3 (WebGL) tier in our ladder — this is effectively a T4 (WebGPU) reference implementation. Worth diffing against `spec/tokens/material.yaml` profiles and considering as the basis for a new tier in O.3 #8.
-- [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) — Pure CSS + SVG `LiquidGlass / LiquidText / LiquidButton`. Aggressive `feDisplacementMap`.
-- [naughtyduk/liquidGL](https://github.com/naughtyduk/liquidGL) — WebGL/canvas with real backdrop sampling rather than `backdrop-filter`.
-- [rizroze/liquid-glass](https://github.com/rizroze/liquid-glass) — Zero-dependency single-file glass with three-pass chromatic aberration via `feColorMatrix`.
-- [gracefullight/liquid-glass](https://github.com/gracefullight/liquid-glass) + [creativoma/liquid-glass](https://github.com/creativoma/liquid-glass) — React + Tailwind component sets.
-- [Atlas Pup Labs — Liquid Glass, but in CSS](https://atlaspuplabs.com/blog/liquid-glass-but-in-css) — Clear SVG displacement + backdrop-filter walkthrough.
-- [kube.io — Liquid Glass in the Browser](https://kube.io/blog/liquid-glass-css-svg/) — Best deep-dive on refraction math; notes Chromium-only SVG filter behavior.
-- [LogRocket — How to create Liquid Glass effects with CSS and SVG](https://blog.logrocket.com/how-create-liquid-glass-effects-css-and-svg/) — Adds `feTurbulence` + `feSpecularLighting`.
-- [Max Geris on dev.to — Physics-based refraction](https://dev.to/maxgeris/recreating-apples-liquid-glass-effect-on-the-web-with-css-svg-and-physics-based-refraction-5cek) — Encodes Snell's law into RGBA channels; chains three displacement passes.
-- [ekino-france — Liquid Glass in CSS (and SVG)](https://medium.com/ekino-france/liquid-glass-in-css-and-svg-839985fcb88d) — Production-oriented with edge highlight tricks.
-- [Josh Comeau — Next-level frosted glass with backdrop-filter](https://www.joshwcomeau.com/css/backdrop-filter/) — Multi-layer recipe with Safari stacking-context guidance.
-- [Liquid Glass WebGL library (ybouane)](https://liquid-glass.ybouane.com/), [Liquid Glass JS (dashersw)](https://dashersw.github.io/liquid-glass-js/), [Three.js multiside refraction (Codrops)](https://tympanus.net/codrops/2019/10/29/real-time-multiside-refraction-in-three-steps/), [Three.js transparent glass (Codrops)](https://tympanus.net/codrops/2021/10/27/creating-the-effect-of-transparent-glass-and-plastic-in-three-js/) — Where the shader tier comes from.
-- [Tailwind Glassmorphism Generator (Ruixen)](https://ruixen.com/generator/glass-morphism) — Token-level Tailwind utilities.
-- [MDN — feDisplacementMap](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap), [MDN — feTurbulence](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence), [Codrops — feTurbulence textures](https://tympanus.net/codrops/2019/02/19/svg-filter-effects-creating-texture-with-feturbulence/), [Can I Use — backdrop-filter](https://caniuse.com/css-backdrop-filter), [fjolt — iOS Safari quirks](https://fjolt.com/article/css-ios-crystalline-effect-backdrop-filter) — Authoritative platform references.
-- [MDN — CSS Painting API (Houdini)](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Painting_API) + [12 Days of Web — Houdini Paint API](https://12daysofweb.dev/2021/houdini) — Caveat: Firefox does not support, Chromium-only enhancement.
 
 ### N.4 Shader / rendering deep dives
 
@@ -331,15 +298,9 @@ Everything below was new at sweep time and is not duplicated above.
 - [OpenAI Codex — iOS Liquid Glass use case](https://developers.openai.com/codex/use-cases/ios-liquid-glass) — Peer LLM-assisted migration kit.
 - [Apple — Liquid Glass overview](https://developer.apple.com/documentation/TechnologyOverviews/liquid-glass), [Adopting Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/adopting-liquid-glass), [`SwiftUI.Glass`](https://developer.apple.com/documentation/swiftui/glass) — Official material description + API surface.
 
-### N.6 Design assets (Figma, Icon Composer)
+### N.6 Icon Composer
 
-- [Figma — macOS 26 Liquid Glass Effect](https://www.figma.com/community/file/1514239434132644410/macos-26-liquid-glass-effect) — Most-downloaded community kit.
-- [Figma — Apple Liquid Glass Control Center (macOS 26)](https://www.figma.com/community/file/1515113236376349942/apple-liquid-glass-ui-control-center-macos-26-apple-wwdc-2025).
-- [Figma — Liquid Glass plugin](https://www.figma.com/community/plugin/1513987776905738207/liquid-glass) — Applies the effect to any frame.
-- [Figma — macOS icon template (Liquid Glass)](https://www.figma.com/community/file/930870327989917713/macos-icon-template-updated-for-macos-26-liquid-glass).
 - [Apple Icon Composer](https://developer.apple.com/icon-composer/) — Layered Liquid Glass icons across iPhone, iPad, Mac, Watch.
-- [Apple macOS 26 UI Kit (Figma Community)](https://www.figma.com/community/file/1543337041090580818/macos-26) — First-party Mac kit; baseline for mockups.
-- [Native — Settings Screens Template for macOS (Figma)](https://www.figma.com/community/file/1352540826859890311/native-settings-screens-template-for-macos).
 
 ### N.7 Accessibility and criticism
 
@@ -356,14 +317,6 @@ Everything below was new at sweep time and is not duplicated above.
 - [Verklaren — Through the lens of design history](https://verklaren.space/liquid-glass-through-design-history/) — Aqua / Frutiger Aero lineage.
 - [Design Republic — Revolution or step backwards?](https://www.designrepublic.io/en/blog/von-flat-design-zu-liquid-glass-revolution-oder-ruckschritt) — European design-studio critique.
 - [TechRadar — Federighi on simulating physical glass](https://www.techradar.com/phones/ios/we-did-all-this-work-with-physical-glass-simulating-as-closely-as-we-could-the-actual-properties-of-glass-for-liquid-glass-says-apples-craig-federighi-then-they-went-further).
-
-### N.8 Design system precedents (cross-pollination)
-
-- [Microsoft — Materials in Windows apps](https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/materials), [Mica](https://learn.microsoft.com/en-us/windows/apps/design/style/mica), [Acrylic](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic), [Fluent 2 Material System](https://fluent2.microsoft.design/material) — Two-tier vocabulary (opaque-sampled Mica vs live-blurred Acrylic) plus documented fallback ladder (transparency off, battery saver, low-end HW).
-- [Material 3 colorScheme dynamic color (softAai)](https://softaai.com/material-3-colorscheme-explained-how-dynamic-color-really-works/) + [Material Components Android color](https://github.com/material-components/material-components-android/blob/master/docs/theming/Color.md) — Monet engine, HCT space, tonal surface tint. Parallel to glass picking up backdrop tint.
-- [HyperFluent GNOME theme](https://github.com/Coopydood/HyperFluent-GNOME-Theme) — Limits of GTK3 CSS for glass + workarounds.
-- [hyprnux/hyprglass](https://github.com/hyprnux/hyprglass) — Hyprland Wayland plugin with frosted blur, edge refraction, chromatic aberration, and specular highlights at compositor level. Closest open-source Linux analog.
-- [Qt blur effect docs (Runebook)](https://runebook.dev/en/docs/qt/qqem-creating-blur-effect) — `QGraphicsBlurEffect` + `Qt::WA_TranslucentBackground` recipe.
 
 ### N.9 Broader macOS craft (beyond Liquid Glass)
 
@@ -405,7 +358,6 @@ Everything below was new at sweep time and is not duplicated above.
 **Patterns and tooling**
 
 - [Superhuman — How to build a remarkable command palette](https://blog.superhuman.com/how-to-build-a-remarkable-command-palette/), [awesome-command-palette](https://github.com/stefanjudis/awesome-command-palette), [MacStories — Command-K Bars as a modern interface pattern](https://www.macstories.net/linked/command-k-bars-as-a-modern-interface-pattern/).
-- [Style Dictionary](https://styledictionary.com/info/tokens/) + [Tokens Studio](https://tokens.studio/) — Cross-platform token pipeline.
 - [Atlassian Design System](https://atlassian.design/), [Carbon Design System (IBM)](https://carbondesignsystem.com/) — Reference for multi-product token + accessibility rigor.
 
 **Communities**
@@ -428,36 +380,24 @@ is committed scope; treat as a backlog for prioritization.
 
 ### O.1 Tighten the existing dossier (low risk)
 
-1. **Promote criticism to a first-class rule.** Add `spec/rules/when-not-to-use-glass.md` cross-referenced from the web prompt and the native skill, citing NN/g, Infinum, Axess Lab, Iconfactory, and the 45%-adoption stat. Currently glass-forbidden is a bullet list; it needs concrete failure cases with sources.
+1. **Promote criticism to a first-class rule.** Expand the native forbidden-surface guidance with concrete failure cases and citations from NN/g, Infinum, Axess Lab, Iconfactory, and the 45%-adoption stat.
 2. **Add a performance-budget rule with citations.** Encode JuniperPhoton's three-textures-per-`CABackdropLayer` number, the Flutter Impeller 16–24 ms data, and the iOS 26.1 Menu regression into a hard limit ("max N live-blurred surfaces; prefer one shared container").
-3. **Cross-reference Apple's own LLM prompts.** Compare `artemnovichkov/xcode-26-system-prompts` line-by-line against `prompts/web-frosted-glass.md` and the native skill to surface gaps and contradictions.
 
 ### O.2 Fill obvious craft gaps (medium)
 
-4. **Command palette / Cmd-K as a documented pattern.** Missing entirely from `spec/components/`. Reference Superhuman's design notes, Raycast's plugin grammar, `awesome-command-palette`. Note how Liquid Glass changes the floating Cmd-K surface.
-5. **Mac app icon guidance.** Add `spec/rules/icon.md` covering the squircle grid, layered model, Icon Composer flow. Link Bjango, Flarup, macOS Icon Gallery.
+4. **Command palette / Cmd-K as a documented pattern.** Expand the native recipe with Superhuman's design notes, Raycast's plugin grammar, and `awesome-command-palette`.
+5. **Mac app icon guidance.** Expand the native icon reference with the squircle grid, layered model, Icon Composer flow, Bjango, Flarup, and macOS Icon Gallery.
 6. **Sidebar / window-chrome patterns beyond toolbars.** Bancarel's full-height sidebar walkthrough and Mario Aguzman's toolbar guidelines have details not currently captured (sidebar inset, titlebar height, traffic-light alignment with first row).
-7. **Material taxonomy borrowed from Fluent.** Adopt a `tier` axis in `spec/tokens/material.yaml` (opaque-tinted / live-blurred / clear-over-media) mapping cleanly to Apple's `.regular` / `.clear` / fallback states. Drives both rendering and fallback behavior.
 
 ### O.3 Expand the kit's surface area (bigger)
 
-8. **A rendering-tier ladder on the web side.** Today the prompt produces one approximation. Real implementations span four tiers:
-   - **T0**: solid tint + 1 px stroke (fallback / reduced-transparency).
-   - **T1**: `backdrop-filter: blur() saturate()` + tint (current).
-   - **T2**: T1 + SVG `feDisplacementMap` edge refraction (Chromium-only).
-   - **T3**: WebGL backdrop sampling with full chromatic dispersion + specular.
-
-   Ship them as named profiles in `spec/tokens/material.yaml`; let the prompt select a tier from stated browser support.
 9. **A Metal-shader companion on the native side.** Document `layerEffect` / `colorEffect` recipes against Victor Baro's SDF + refraction math; link Inferno. New subagent: `liquid-glass-shader-implementer`.
-10. **Style Dictionary export pipeline.** Add `spec/build/` step emitting Swift extensions, CSS custom properties, and Tailwind config from one source. Optional Tokens Studio sync.
-11. **A Figma kit derived from the same tokens.** Mirror `spec/` into a `kit-figma/` file; community Figma kits as visual reference. Round-trips with designers; pairs naturally with O.3 #10.
 
 ### O.4 Reframe the product (big bets — pick one)
 
-12. **Position as the accessibility-first Liquid Glass implementation.** Apple's reception is mixed (NN/g, Infinum, 45% adoption). Open lane: a kit that ships Liquid Glass with the contrast film, reduced-transparency tier, and audit baked in.
-13. **Go multi-target.** Extend beyond web + macOS to Compose Multiplatform (Haze, Cloudy), React Native (Callstack, Expo), Flutter (with Impeller perf caveats). "Liquid Glass design system, anywhere."
+12. **Position as the accessibility-first Liquid Glass implementation.** Apple's reception is mixed (NN/g, Infinum, 45% adoption). Open lane: a kit that ships Liquid Glass with reduced-transparency guidance and review rules.
 14. **Become the canonical Mac craft kit, not just glass.** Glass is one chapter. The larger craft is sidebars + toolbars + command palette + icons + menu bar + multi-window + keyboard, codified the way Linear / Raycast / Things / Craft / Arc share unwritten conventions. More durable than glass-specific guidance if Apple iterates hard in macOS 27.
 
 ### O.5 Recommendation
 
-If only one direction: **O.3 #8 (web rendering ladder) + O.4 #12 (accessibility-first framing)**. Together they give the kit a defensible technical moat (multi-tier rendering with documented fallback) and a clear narrative (the responsible Liquid Glass kit) without forcing a rewrite. **O.4 #14** is the long-game bet if this becomes a serious project.
+If only one direction: **O.4 #12 (accessibility-first framing)**. **O.4 #14** is the long-game bet if this becomes a serious project.

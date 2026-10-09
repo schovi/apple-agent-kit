@@ -24,7 +24,7 @@ Read the user's intent first. If the code uses no `.glassEffect` / `NSGlassEffec
 
 The full rule set lives in:
 
-- `liquid-glass/references/anti-patterns.md` (**A1–A24** — anti-patterns; **A25** / **A26** / **A27** are web-only as literal IDs — but A26 has a native scope (custom hit area with no focus reflection) and A27 has a native scope (icon-only `Button` / `NSButton` without `accessibilityLabel`); see `macos-app-design/references/accessibility.md`).
+- `liquid-glass/references/anti-patterns.md` (**A1–A24** — anti-patterns).
 - `liquid-glass/references/performance-budget.md` (**B1** — cap on live-blurred surfaces per pane).
 - `liquid-glass/references/when-not-to-use-glass.md` (**F1–F5** — forbidden surfaces; review-only).
 
@@ -45,7 +45,7 @@ Every glass finding must map to an A-, B-, or F-code from those files (or a `FW 
 6. **A6 — Broken concentricity.** Parent `.containerShape` and child `ConcentricRectangle()` agree. AppKit code with explicit radii respects `outer = inner + inset`.
 7. **A7 — Mixed Regular and Clear in one group.** A `GlassEffectContainer` or sibling glass set uses one variant.
 8. **A8 — Unreadable Clear glass.** Clear glass over rich media has a dim layer behind it. If a dim layer can't be guaranteed, default to Regular.
-9. **A9 — Fighting system accessibility flags.** No manual `accessibilityReduceTransparency` branching around `.glassEffect`. Also fires when an icon-only `Button` ships without `accessibilityLabel` (native scope of A27) or when a custom hit area hides the focus ring without replacing it (native scope of A26).
+9. **A9 — Fighting system accessibility flags.** No manual `accessibilityReduceTransparency` branching around `.glassEffect`.
 10. **A10 — Apple endorsement claims.** No "Apple-official", "Apple-certified", "licensed by Apple", "Liquid Glass certified".
 
 ### macOS 26 gotchas (A11–A24)
@@ -56,8 +56,8 @@ A11 legacy `.sidebar` material · A12 `.presentationBackground(.glass)` on deten
 
 Count the live-blurred surfaces visible per top-level pane (sidebar, content, inspector). A `GlassEffectContainer` counts as **one** surface regardless of children.
 
-- **At rest** above `material.yaml` `budget.recommended` (3) with no transient reason → flag as B1.
-- **Any visible state** above `budget.max` (6) → flag as B1, hard.
+- **At rest** above the recommended cap (3) with no transient reason → flag as B1.
+- **Any visible state** above the hard ceiling (6) → flag as B1, hard.
 
 #### Shader-driven hero surfaces
 
@@ -81,10 +81,10 @@ For non-glass code, scan against the principles and standards in `macos-app-desi
 - **Alerts / confirmation dialogs / tooltips use the system APIs** (`.alert`, `.confirmationDialog`, `.help`, `NSAlert`). No custom modal sheets imitating the system alert. See `macos-app-design/references/system-primitives.md`.
 - **Light + dark mode both work.** No inverted colors. System semantic colors used. See `macos-app-design/references/light-dark-and-accessibility.md`.
 
-### Accessibility (generic WCAG — native scope of A26, A27 lives here)
+### Accessibility (generic WCAG)
 
-- **A27 (native) — Icon-only button without `accessibilityLabel`.** WCAG 4.1.2.
-- **A26 (native) — Custom hit area without focus reflection.** WCAG 2.4.7.
+- **HIG — accessibility: icon-only control lacks `accessibilityLabel`.** WCAG 4.1.2.
+- **HIG — accessibility: custom hit area lacks visible focus.** WCAG 2.4.7.
 - **44×44 pt hit area minimum.** WCAG 2.5.5.
 - **Color is never the only signal.** WCAG 1.4.1.
 - **Honor `reduceMotion`.** WCAG 2.3.3.

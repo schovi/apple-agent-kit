@@ -60,7 +60,7 @@ grid.column(at: 0).xPlacement = .trailing
 
 For dynamic forms, drive `NSGridView` rows from a model.
 
-## Geometry (spec/patterns/form-rows.md)
+## Geometry
 
 - row gap 12 (`groupGap`)
 - section gap 24 (`screenMarginRegular`)

@@ -50,7 +50,6 @@ When in doubt, both. The HIG conformance bits compose cleanly with glass.
 
 - Not iOS — see `ios-app-design` (placeholder) when that lands.
 - Not Liquid Glass material rules — see `liquid-glass`.
-- Not a web mockup of a Mac app — that lives in the repo prompt `prompts/web-frosted-glass.md` plus the `prompts/macos-chrome-mockup.md` addendum.
 - Not an Apple-official design system. Build to HIG, but never claim "Apple-certified" or "Apple-endorsed".
 
 ## Reference map
@@ -66,7 +65,7 @@ When in doubt, both. The HIG conformance bits compose cleanly with glass.
 - `references/titlebar-accessory.md` — title-bar accessory views.
 - `references/system-primitives.md` — alerts, confirmation dialogs, tooltips. Use the system; don't restyle.
 - `references/icon.md` — Icon Composer, squircle grid, light / dark / tinted variants.
-- `references/accessibility.md` — WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.5 target size, 4.1.2 name) with SwiftUI + AppKit recipes. A26 / A27 native scope lives here.
+- `references/accessibility.md` — WCAG mapping (1.4.1 color, 2.4.7 focus, 2.5.5 target size, 4.1.2 name) with SwiftUI + AppKit recipes.
 - `references/light-dark-and-accessibility.md` — appearance, dynamic system color, system accent.
 - `references/patterns/` — common SwiftUI structural patterns:
   - `form-rows.md`, `inset-list.md`, `disclosure-group.md`, `stepper.md`.

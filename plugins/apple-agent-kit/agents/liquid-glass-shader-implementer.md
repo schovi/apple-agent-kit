@@ -82,7 +82,7 @@ Follow the worked recipes and packaging section in
 - **One shader-driven hero per pane.** Multiple shader surfaces
   compete for offscreen texture allocations. The
   `apple-app-reviewer` flags more than one as overbudget
-  even though B1's `lg-glass` counter doesn't catch shaders directly.
+  even though B1 does not count shaders directly.
 - **No `CIFilter` / `CABackdropFilter` hacks.** The stock APIs are
   the surface; if Apple doesn't expose what you need, a Metal shader
   is the answer, not a private API workaround. Still A3.
@@ -109,8 +109,7 @@ Follow the worked recipes and packaging section in
   one can — it's Apple-private).
 - You do not write a "Liquid Glass polyfill" for older macOS. The
   shader is for *enriching* macOS 26 surfaces, not faking them on
-  prior versions. For macOS 15 and earlier, refuse and offer
-  the web frosted-glass prompt at `prompts/web-frosted-glass.md`.
+  prior versions. For macOS 15 and earlier, refuse.
 - You do not invent token values. Radius, padding, motion duration
   come from `references/tokens.md`. Color tints come from the
   surface's `.tint(_:)` modifier, not from constants in the shader.

@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Breaking
+
+- **Web side removed.** The repo is now native Apple only: the plugin plus the Swift showcase. Deleted `prompts/` (web frosted-glass prompt), `examples/macos-web/`, `audit/` (web auditor), `spec/` and `dist/` (token spec and exports), `scripts/serve.mjs`, `kit-figma/`, `package.json`, `.claude/skills/liquid-glass-sync/`, `docs/design-system.md`, `docs/apple-prompt-comparison.md`, `docs/web-prompt.md`, `docs/quickstart.md`, `CONTRIBUTING.md`, and stray screenshots. Recover any of it from git history (commit `e6384ea`, v0.6.0).
+- **Plugin is the source of truth.** Token values cited from `spec/tokens/material.yaml` are inlined in the skill references. Showcase `Tokens.generated.swift` is now hand-maintained `TokenValues.swift`.
+- **Web-only audit IDs retired.** A25 is gone. Native focus and accessible-name issues formerly tagged A26 / A27 are reported as `HIG — accessibility`. A1–A24, B1, F1–F5 are unchanged.
+
+### Added
+
+- **`design-custom-macos-apps` skill** (`plugins/apple-agent-kit/skills/design-custom-macos-apps/`). Plans, implements, reviews, and costs distinctive custom Mac UI that keeps Mac behavior. Treats technology, behavior, and appearance as separate decisions. `SKILL.md` plus references: `customization-levels.md`, `visual-system.md`, `mac-behavior.md`, `glass-strategy.md`, `maintenance.md`, `review-checklist.md`, `scenarios.md`, `case-studies.md` (Things, Bear, Craft, Fantastical, Rogue Amoeba, DaisyDisk, CleanShot, NetNewsWire, with sources and evidence limits). Composes `macos-app-design` and `liquid-glass`. No new audit IDs, no token changes.
+- Skill listed in `AGENTS.md`, `README.md`, both plugin manifests, `.claude-plugin/marketplace.json`, and `package.json`.
+
 ## 0.6.0 — rebrand + skill split (apple-agent-kit)
 
 ### Breaking

@@ -60,7 +60,7 @@ slider.isVertical = true
 slider.frame.size = NSSize(width: 22, height: 200)
 ```
 
-## Geometry (spec/components/slider.yaml)
+## Geometry
 
 - track height 4, capsule
 - thumb 22 × 22 capsule

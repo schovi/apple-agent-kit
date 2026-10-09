@@ -19,7 +19,7 @@ struct Inspector: View {
                 inspectorGroup(label: "Accessibility",
                                value: "reduceTransparency · increaseContrast · reduceMotion (system-driven)")
                 inspectorGroup(label: "Source spec",
-                               value: "spec/liquid-glass.profile.yaml")
+                               value: "liquid-glass plugin reference")
             }
             .padding(Tokens.Spacing.screenMarginRegular)
         }

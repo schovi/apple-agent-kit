@@ -86,11 +86,10 @@ popover.show(relativeTo: statusItem.button!.bounds,
 - The status item's `button.accessibilityLabel` is set by
   `MenuBarExtra("Label", ...)` — the SwiftUI title doubles as the
   accessibility label. AppKit code MUST set
-  `button?.setAccessibilityLabel("...")` (A27 / A9 native scope).
+  `button?.setAccessibilityLabel("...")` (`HIG — accessibility`).
 - Don't mark the status item as `accessibilityElementsHidden = true`
   — it's reachable via VoiceOver's menu-bar navigation.
 
 ## Sources
 
-See `spec/patterns/menu-bar-extra.md` for HIG citations and
-ecosystem references.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

@@ -69,7 +69,7 @@ let layout = NSCollectionViewCompositionalLayout.list(
 )
 ```
 
-## Geometry (spec/patterns/inset-list.md)
+## Geometry
 
 - section radius 12 (`sm`)
 - row min-height 32 (compact) / 44 (regular)

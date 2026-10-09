@@ -121,7 +121,7 @@ struct DetailView: View {
                         .id(id)
                     }
 
-                    Text("Inspired by Apple's Liquid Glass, not Apple-endorsed. Tokens trace to spec/tokens/*.yaml.")
+                    Text("Inspired by Apple's Liquid Glass, not Apple-endorsed. Tokens follow the plugin reference.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .padding(.top, Tokens.Spacing.sectionGap)

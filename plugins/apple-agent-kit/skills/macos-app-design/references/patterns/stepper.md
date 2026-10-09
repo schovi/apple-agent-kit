@@ -75,7 +75,7 @@ let value = NSTextField(labelWithString: "\(stepper.integerValue)")
 value.alignment = .center
 ```
 
-## Geometry (spec/patterns/stepper.md)
+## Geometry
 
 - button size 28 (toolbar) / 22 (form)
 - button radius capsule (toolbar) / 12 (form)

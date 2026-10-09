@@ -1,8 +1,6 @@
 # Keyboard shortcuts
 
-A Mac app is judged on its keyboard. The kit's taxonomy is in
-`spec/patterns/keyboard-shortcuts.md`; this file is the
-SwiftUI / AppKit how-to.
+A Mac app is judged on its keyboard. This file is the SwiftUI / AppKit how-to.
 
 ## Modifier conventions
 
@@ -131,5 +129,4 @@ Every shortcut MUST appear in a discoverable surface:
 
 ## Sources
 
-See `spec/patterns/keyboard-shortcuts.md` for HIG, Raycast, Things,
-Linear, Arc, and Sublime / VS Code citations.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

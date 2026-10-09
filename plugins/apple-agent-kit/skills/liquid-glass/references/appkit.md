@@ -1,7 +1,7 @@
 # AppKit cheat-sheet
 
-Confirmed APIs for AppKit on macOS 26. Sources in `docs/resources.md`
-§ B–D. Do not invent API names.
+Confirmed APIs for AppKit on macOS 26. Sources and maintainer provenance live
+in the apple-agent-kit repository's `docs/resources.md` (§ B–D). Do not invent API names.
 
 ## Glass material
 

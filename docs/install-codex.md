@@ -1,6 +1,6 @@
 # Install for Codex
 
-This installs the **native macOS 26** plugin. For web Liquid Glass UI (in Codex or any other tool), use `prompts/web-frosted-glass.md` instead. See `docs/web-prompt.md`.
+This installs the **native Apple** plugin.
 
 ## Marketplace install (recommended)
 
@@ -14,7 +14,7 @@ Open Codex and run:
 /plugins
 ```
 
-Install **Liquid Glass Native UI**.
+Install **Apple Agent Kit**.
 
 ## Repo-local skill install (no plugin)
 
@@ -22,7 +22,7 @@ If you want the skill in a single repo without committing a plugin install, copy
 
 ```bash
 mkdir -p .agents/skills
-cp -R path/to/liquid-glass-agent-kit/plugins/apple-agent-kit/skills/liquid-glass .agents/skills/
+cp -R path/to/apple-agent-kit/plugins/apple-agent-kit/skills/liquid-glass .agents/skills/
 ```
 
 Codex scans `.agents/skills` from the current directory up to the repo root.
@@ -37,8 +37,6 @@ $liquid-glass Port this AppKit toolbar to use NSGlassEffectView.
 
 You can also invoke it implicitly. Codex selects the skill from its description when the user asks for "Liquid Glass macOS app", "macOS 26 Tahoe UI", "SwiftUI glass effect", or similar.
 
-For web HTML/CSS, paste `prompts/web-frosted-glass.md` instead of installing anything.
-
 ## How this plugin is laid out
 
 `plugins/apple-agent-kit/` contains `.codex-plugin/plugin.json` (which Codex reads) and `.claude-plugin/plugin.json` (which Claude Code reads). Both manifests point at the same `skills/` directory.
@@ -48,7 +46,7 @@ For web HTML/CSS, paste `prompts/web-frosted-glass.md` instead of installing any
 After the upstream repo changes, refresh the marketplace:
 
 ```bash
-codex plugin marketplace update liquid-glass-agent-kit
+codex plugin marketplace update apple-agent-kit
 ```
 
 Then reinstall the plugin.

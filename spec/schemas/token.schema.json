@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://liquid-glass-agent-kit.example/schemas/token.schema.json",
-  "title": "Liquid Glass Token File",
-  "type": "object",
-  "minProperties": 1,
-  "additionalProperties": true
-}

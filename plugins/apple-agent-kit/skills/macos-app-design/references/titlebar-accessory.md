@@ -54,7 +54,7 @@ pathControl.url = currentURL
 accessory.view = pathControl
 ```
 
-## Geometry (spec/patterns/titlebar-accessory.md)
+## Geometry
 
 - min-height 32 (matches toolbar item height)
 - max-width 360

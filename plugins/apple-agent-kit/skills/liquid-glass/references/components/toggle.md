@@ -51,7 +51,7 @@ toggle.action = #selector(switchChanged(_:))
 toggle.state = .on
 ```
 
-## Geometry (spec/components/toggle.yaml)
+## Geometry
 
 - track 38 × 22 capsule
 - knob 18 capsule, inset 2

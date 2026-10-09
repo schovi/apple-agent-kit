@@ -1,6 +1,6 @@
 {
   "name": "apple-agent-kit",
-  "description": "Build authentic Apple apps for agents. Two skills: macos-app-design (HIG conformance, menu bar, multi-window, keyboard shortcuts, system primitives, icon, accessibility) and liquid-glass (macOS 26 glass material, NavigationSplitView, NSGlassEffectView, anti-patterns, performance budget, shaders). iOS coverage coming.",
+  "description": "Build authentic Apple apps for agents. Three skills: macos-app-design (HIG conformance, menu bar, multi-window, keyboard shortcuts, system primitives, icon, accessibility), liquid-glass (macOS 26 glass material, NavigationSplitView, NSGlassEffectView, anti-patterns, performance budget, shaders), and design-custom-macos-apps (distinctive custom UI that keeps Mac behavior: customization levels, glass strategy, maintenance cost, review checklist). iOS coverage coming.",
   "version": "0.6.0",
   "author": { "name": "apple-agent-kit contributors" },
   "repository": "https://github.com/schovi/apple-agent-kit",

@@ -64,7 +64,7 @@ spinner.isIndeterminate = true
 spinner.startAnimation(nil)
 ```
 
-## Geometry (spec/components/progress.yaml)
+## Geometry
 
 - linear height 4, capsule, min-width 120
 - circular sizes 16 / 24 / 32 (mini, small / regular, large)

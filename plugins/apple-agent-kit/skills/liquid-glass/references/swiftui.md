@@ -1,7 +1,8 @@
 # SwiftUI cheat-sheet
 
-Confirmed APIs for SwiftUI on macOS 26 / iOS 26. Sources in
-`docs/resources.md` § B–F. Do not invent API names — if you need
+Confirmed APIs for SwiftUI on macOS 26 / iOS 26. Sources and maintainer
+provenance live in the apple-agent-kit repository's `docs/resources.md` (§ B–F).
+Do not invent API names — if you need
 something not listed here, check Apple's reference first.
 
 ## Glass material

@@ -2,7 +2,7 @@
 
 Spotlight is the system version. Raycast / Linear / Superhuman are the app-level pattern. On macOS 26 a credible palette is ~40 lines of SwiftUI.
 
-## Geometry (mirrors `spec/components/command-palette.yaml`)
+## Geometry
 
 - Width 640, max-height 480, top offset 96 from window edge.
 - Panel radius 16 (md). Items radius 12 (sm) — concentric (16 outer − 4 panel padding).
@@ -95,4 +95,4 @@ For AppKit codebases: use an `NSPanel` with style mask including `.utilityWindow
 
 ## Sources
 
-See `spec/patterns/command-palette.md` for citations.
+Sources and maintainer provenance live in the apple-agent-kit repository's `docs/resources.md`.

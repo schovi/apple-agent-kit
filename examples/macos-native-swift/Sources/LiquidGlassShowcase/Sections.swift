@@ -579,7 +579,7 @@ struct AntiPatternsSection: View {
             SectionHeader(
                 eyebrow: "Reference",
                 title: "Anti-patterns",
-                lede: "The auditor in scripts/audit-liquid-glass-html.mjs flags these for the web profile. The same rules apply natively."
+                lede: "These rules apply to native Liquid Glass surfaces."
             )
             ContentCardView(
                 title: "Don't",

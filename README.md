@@ -1,47 +1,32 @@
 # Apple Agent Kit
 
-A native Apple-app kit for AI tools. Build Mac apps that actually feel like Mac apps — HIG conformance, menu bar order, multi-window, keyboard shortcuts, system primitives, accessibility — plus the macOS 26 Liquid Glass material with the fallback ladder baked in. iOS coverage is on the roadmap.
+An agent plugin for building Mac apps that feel like Mac apps. Install it into Claude Code or Codex, then ask for SwiftUI or AppKit work. iOS coverage is on the roadmap.
 
-Two delivery surfaces, one repo:
+## Skills
 
-- **Native plugin** (`plugins/apple-agent-kit/`) — installs into Claude Code or Codex. Two skills:
-  - `macos-app-design` — HIG conformance, menu bar, multi-window, keyboard shortcuts, file management, system primitives, app icon, generic accessibility. macOS 14+.
-  - `liquid-glass` — macOS 26 glass material wrapping the real `glassEffect` / `NSGlassEffectView` / `ConcentricRectangle` APIs. Anti-patterns, performance budget, Metal shaders.
-- **Web prompt** (`prompts/web-frosted-glass.md`) — paste-once block for any AI tool that can't install plugins (ChatGPT, v0, Lovable, Figma Make). Produces a frosted-glass approximation; not a render of native Liquid Glass.
+| Skill | Use it for |
+|---|---|
+| `macos-app-design` | HIG conformance: menu bar order, multi-window, keyboard shortcuts, file management, system primitives, app icon, accessibility. macOS 14+ |
+| `liquid-glass` | The macOS 26+ Liquid Glass material via the real `glassEffect` / `NSGlassEffectView` / `ConcentricRectangle` APIs. Anti-patterns, performance budget, Metal shaders |
+| `design-custom-macos-apps` | A distinctive custom UI that keeps Mac behavior: customization levels, glass strategy, maintenance cost, review checklist, case studies |
+| `ios-app-design` | Placeholder |
 
-## The kit's position
+Subagents (Claude Code only): `apple-app-reviewer` (read-only review), `liquid-glass-implementer`, `liquid-glass-shader-implementer`.
 
-Apple shipped Liquid Glass to a mixed reception. [NN/g called it "cracked"](https://www.nngroup.com/articles/liquid-glass/). [Infinum measured WCAG-AA failures on Control Center](https://infinum.com/blog/apples-ios-26-liquid-glass-sleek-shiny-and-questionably-accessible/). [45% of developers held back from the redesign](https://www.geeky-gadgets.com/apple-liquid-glass-adoption-rate/). The kit's answer: ship Liquid Glass with the contrast film, the reduced-transparency tier, and the audit baked in — accessibility-first, not as an afterthought. WCAG 1.4.3 / 2.4.7 / 2.5.5 / 4.1.2 / 2.3.3 are enforced at generation time through the prompt, at review time through `npm run audit`, and at runtime through the renderer-tier ladder (T0 solid fallback ⇢ T1 backdrop-filter ⇢ T2 displacement ⇢ T3 WebGL). See `spec/rules/accessibility-rules.md`.
+## Install
 
-The HIG side (menu bar, multi-window, shortcuts) is just as important. A Liquid Glass surface inside an otherwise-non-native app still feels off — `macos-app-design` exists to make the rest of the app feel like a Mac app.
+### Claude Code
 
-## What this is
-
-- **`spec/`** — canonical tokens, component dimensions, layering rules, accessibility fallbacks. Single source of truth.
-- **`prompts/web-frosted-glass.md`** — paste-once block for any web-output AI tool.
-- **`plugins/apple-agent-kit/`** — Codex + Claude Code plugin. Two production skills + one iOS stub.
-- **`examples/macos-web/`** — showcase of what a web design tool produces when you paste the web prompt. HTML, CSS, vanilla JS.
-- **`examples/macos-native-swift/`** — showcase SwiftUI app on macOS 26 demonstrating both skills.
-- **`audit/`** — standalone CLI that statically checks web output for the most common hallucinations.
-
-## What this is not
-
-- Not Apple-official, Apple-certified, or Apple-endorsed.
-- The web side is **not** a render of native Liquid Glass. It's frosted glass that obeys the same layout discipline. Real Liquid Glass needs Apple APIs on macOS 26.
-- Not iOS — see the `ios-app-design` stub for status.
-
-## Quick start, web
-
-```text
-1. Open prompts/web-frosted-glass.md
-2. Copy its contents into your AI tool, before your UI request
-3. Ask for the UI you want
-4. (Optional) audit the output: node audit/liquid-glass-audit.mjs ./output
+```bash
+claude plugin marketplace add schovi/apple-agent-kit --sparse .claude-plugin plugins/apple-agent-kit
+/plugin install apple-agent-kit@apple-agent-kit
 ```
 
-Tested with: ChatGPT, Claude (web + Code), Codex, Cursor, v0, Lovable, Figma Make, Bolt, Windsurf, JetBrains AI, Xcode AI.
-
-## Quick start, native macOS
+```text
+/apple-agent-kit:macos-app-design Build a SwiftUI sidebar app with NavigationSplitView and a correct menu bar.
+/apple-agent-kit:liquid-glass Apply Liquid Glass to the inspector.
+/apple-agent-kit:design-custom-macos-apps Plan a branded menu bar utility that still supports macOS 14.
+```
 
 ### Codex
 
@@ -50,70 +35,50 @@ codex plugin marketplace add schovi/apple-agent-kit --sparse .agents/plugins plu
 ```
 
 ```text
-$macos-app-design Build a SwiftUI sidebar app with NavigationSplitView and a menu bar wired correctly.
+$macos-app-design Build a SwiftUI sidebar app with NavigationSplitView and a correct menu bar.
 $liquid-glass Add Liquid Glass to the toolbar of this app.
+$design-custom-macos-apps Review this custom canvas for keyboard and VoiceOver support.
 ```
 
-### Claude Code
+Details: `docs/install-claude.md`, `docs/install-codex.md`.
+
+## Position
+
+Liquid Glass shipped with documented readability problems ([NN/g](https://www.nngroup.com/articles/liquid-glass/), [Infinum](https://infinum.com/blog/apples-ios-26-liquid-glass-sleek-shiny-and-questionably-accessible/)). The kit treats accessibility as the default: glass stays off content layers, system accessibility settings are never overridden, and every icon-only control gets a name and visible focus.
+
+A glass surface inside an otherwise non-native app still feels wrong. That is why `macos-app-design` exists next to `liquid-glass`.
+
+## Showcase
 
 ```bash
-claude plugin marketplace add schovi/apple-agent-kit --sparse .claude-plugin plugins/apple-agent-kit
-/plugin install apple-agent-kit@apple-agent-kit
-/apple-agent-kit:macos-app-design Build a SwiftUI inspector pane with the right keyboard shortcut.
-/apple-agent-kit:liquid-glass Apply Liquid Glass to the inspector.
+examples/macos-native-swift/scripts/run.sh     # build and launch (macOS 26+, Xcode 26+)
+examples/macos-native-swift/scripts/xcode.sh   # open in Xcode
 ```
 
-## Run the showcases
+The showcase compiles a Metal shader. On Xcode 26+ install the Metal Toolchain once: `xcodebuild -downloadComponent MetalToolchain`.
 
-```bash
-npm run example:web              # web showcase  http://localhost:8000
-npm run example:native           # native macOS showcase (requires macOS 26 + Xcode 26)
-npm run example:native:xcode     # open the SwiftUI package in Xcode
-```
-
-## Audit (web)
-
-```bash
-npm run audit                              # audits examples/macos-web
-node audit/liquid-glass-audit.mjs <path>   # audit arbitrary output
-```
-
-Regex-based static check, dependency-free. Catches glass-on-glass, glass behind body text, off-token blur / saturation / radius / opacity, capsule miscalculation, mixed Regular + Clear, missing accessibility fallbacks, and "Apple-official" claims. See `audit/README.md`. Exit 0 = clean, 1 = findings.
-
-## Native review
-
-Use the read-only `apple-app-reviewer` subagent to review SwiftUI / AppKit code against both HIG (`macos-app-design`) and Liquid Glass anti-patterns (`liquid-glass`). It does not edit files.
-
-## Repo layout
+## Layout
 
 ```
-spec/                            canonical tokens, components, rules
-prompts/
-└── web-frosted-glass.md         the portable web prompt
-plugins/
-└── apple-agent-kit/             Codex + Claude plugin
-    ├── skills/
-    │   ├── liquid-glass/        macOS 26 glass material
-    │   ├── macos-app-design/    HIG / Mac craft
-    │   └── ios-app-design/      placeholder
-    └── agents/                  apple-app-reviewer + liquid-glass-implementer(+shader)
-examples/
-├── macos-web/                   showcase: produced from the web prompt
-└── macos-native-swift/          showcase: produced via the native plugin
-audit/                           standalone web audit CLI
-docs/                            design-system inventory + install guides + resources
+plugins/apple-agent-kit/
+├── skills/
+│   ├── liquid-glass/              macOS 26+ glass material
+│   ├── macos-app-design/          HIG / Mac craft
+│   ├── design-custom-macos-apps/  custom UI that keeps Mac behavior
+│   └── ios-app-design/            placeholder
+└── agents/                        reviewer + implementers
+examples/macos-native-swift/       SwiftUI showcase
+docs/                              install guides + source dossier
 ```
 
-## Editing
+## Not
 
-`spec/` is canonical. When tokens change, propagate to:
+- Not Apple-official, Apple-certified, or Apple-endorsed.
+- Not a polyfill. Liquid Glass needs macOS 26+; older systems get a coherent non-glass design.
 
-- The token block inside `prompts/web-frosted-glass.md`
-- `examples/macos-web/tokens.js`
-- `examples/macos-native-swift/Sources/.../Tokens.swift`
-- The native plugin references under `plugins/apple-agent-kit/skills/liquid-glass/references/`
+## Contributing
 
-The local `.claude/skills/liquid-glass-sync/` skill orchestrates these updates.
+See `AGENTS.md`. It applies to humans too.
 
 ## License
 

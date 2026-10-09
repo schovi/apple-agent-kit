@@ -1,7 +1,6 @@
 # Native tokens
 
-The geometry tokens from `spec/tokens/*.yaml` apply to native too. Material
-numerics do not — macOS 26 renders Liquid Glass in real time and Apple
+These geometry tokens apply to native code. Material numerics do not — macOS 26 renders Liquid Glass in real time and Apple
 publishes no portable blur / saturation / opacity values.
 
 ## Radii (points)
@@ -48,7 +47,7 @@ Easings:
 ## Typography
 
 Use the SF system font (`Font.system(...)` / `NSFont.systemFont(ofSize:)`).
-Eleven steps from caption2 to largeTitle — same ramp as the web profile.
+Eleven steps from caption2 to largeTitle.
 
 | Token | Size / Line | Weight |
 |---|---|---|
@@ -67,17 +66,15 @@ Eleven steps from caption2 to largeTitle — same ramp as the web profile.
 ## Material — do not invent numerics
 
 Apple does not publish blur / saturation / opacity numerics for Liquid Glass.
-The web profile (`spec/tokens/material.yaml`) is a community approximation
-labeled as such. For native code, use the variant API and let the system
-render — never reach for `CIFilter` to "hand-tune" the look.
+For native code, use the variant API and let the system render — never reach
+for `CIFilter` to "hand-tune" the look.
 
 - SwiftUI: `Glass.regular`, `Glass.clear`, `.glass.tint(_:).interactive()`.
 - AppKit: `NSGlassEffectView`, optional `tintColor`; or use the right `NSVisualEffectMaterial` (`.popover`, `.menu`, `.sheet`, etc.).
 
 ## Material roles — pick by where the surface lives
 
-`spec/tokens/material.yaml` `roles.*` names each surface by where it sits.
-The role chooses the right Apple API for each platform and decides whether
+Each role names a surface by where it sits. The role chooses the right Apple API and decides whether
 the surface counts against the B1 live-blur budget.
 
 | Role | SwiftUI | AppKit (`NSVisualEffectView.Material`) | macOS 26 Glass | Counts vs B1 |
